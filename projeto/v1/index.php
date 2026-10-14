@@ -34,10 +34,43 @@ $projetos = [
     ],
 ];
 
+$tema = $_GET['tema'] ?? $_COOKIE['tema'] ?? 'claro';
 
+// Validação (R6): só pode ser 'claro' ou 'escuro'.
+if ($tema !== 'claro' && $tema !== 'escuro') {
+    $tema = 'claro';
+}
+
+// setcookie só quando o tema vem pela URL (grava por 30 dias).
+if (isset($_GET['tema'])) {
+    setcookie('tema', $tema, time() + (30 * 24 * 60 * 60), '/');
+}
+
+// ------------------------------------------------------------
+// Rota JSON (?formato=json)
+// Devolve perfil e projetos em JSON e encerra sem enviar HTML.
+// Precisa vir ANTES de qualquer saída HTML.
+// ------------------------------------------------------------
+if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
+    header('Content-Type: application/json; charset=utf-8');
+
+    $dados = [
+        'perfil'   => $perfil,
+        'projetos' => $projetos,
+    ];
+
+    echo json_encode($dados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+// ------------------------------------------------------------
+// Qual página mostrar (lida da query string)
+// ------------------------------------------------------------
 $pagina = $_GET['pagina'] ?? 'inicio';
 
-
+// ------------------------------------------------------------
+// Detalhes de um projeto (?pagina=projeto&id=N)
+// ------------------------------------------------------------
 $projetoAtual = null;
 $erro         = null; // null | 'projeto' | 'pagina'
 
@@ -55,6 +88,10 @@ if ($pagina == 'projeto') {
     http_response_code(404);
     $erro = 'pagina'; // "Página não encontrada"
 }
+
+// Texto e link do botão de troca de tema
+$temaOposto   = ($tema === 'claro') ? 'escuro' : 'claro';
+$rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -63,7 +100,7 @@ if ($pagina == 'projeto') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Estudante | <?= htmlspecialchars($perfil['nome']) ?></title>
 </head>
-<body>
+<body class="tema-<?= htmlspecialchars($tema) ?>">
 
     <!-- 5. Cabeçalho e menu (mesmo em todas as páginas) -->
     <header>
@@ -75,9 +112,12 @@ if ($pagina == 'projeto') {
         </p>
 
         <nav>
-            <a href="?pagina=inicio">Início</a> |
-            <a href="?pagina=habilidades">Habilidades</a> |
-            <a href="?pagina=projetos">Projetos</a>
+            <a href="?pagina=inicio&amp;tema=<?= $tema ?>">Início</a> |
+            <a href="?pagina=habilidades&amp;tema=<?= $tema ?>">Habilidades</a> |
+            <a href="?pagina=projetos&amp;tema=<?= $tema ?>">Projetos</a> |
+            <a href="?pagina=<?= htmlspecialchars($pagina) ?>&amp;tema=<?= $temaOposto ?>">
+                <?= $rotuloTrocar ?>
+            </a>
         </nav>
     </header>
 
@@ -147,6 +187,8 @@ if ($pagina == 'projeto') {
 
     <!-- 7. Rodapé -->
     <footer>
+        <p>Tema atual: <strong><?= htmlspecialchars($tema) ?></strong></p>
+        <p><a href="?formato=json">Ver versão JSON</a></p>
         <p>&copy; <?= date('2026') ?> <?= htmlspecialchars($perfil['nome']) ?></p>
     </footer>
 
