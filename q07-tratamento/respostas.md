@@ -41,5 +41,13 @@ Segurança: htmlspecialchars() trata caracteres especiais antes de exibi-los, aj
 5. No navegador, teste ?nome=<script>alert('Ataque')</script> antes e depois da correção
 (use o histórico de commits ou desfaça a correção temporariamente) e explique oque é XSS.
 
-Antes da correção, o código exibia diretamente o conteúdo recebido pela URL. Por isso, o navegador poderia interpretar a tag <script> e executar o JavaScript, mostrando o alerta “Ataque”. Depois da correção, a função htmlspecialchars() transforma os caracteres especiais em entidades HTML, fazendo com que o conteúdo seja exibido como texto, sem executar o script. XSS é uma vulnerabilidade que permite a execução de scripts maliciosos no navegador de quem acessa uma página vulnerável.
+### 5. Teste de XSS antes e depois da correção
 
+**Antes da correção:**  
+O código exibia diretamente o conteúdo recebido pela URL. Por isso, o navegador poderia interpretar a tag `<script>` e executar o JavaScript, mostrando o alerta “Ataque”.
+
+**Depois da correção:**  
+A função `htmlspecialchars()` transforma os caracteres especiais em entidades HTML, fazendo com que o conteúdo seja exibido como texto, sem executar o script.
+
+**O que é XSS?**  
+XSS (*Cross-Site Scripting*) é uma vulnerabilidade que permite a execução de scripts maliciosos no navegador de quem acessa uma página vulnerável.
