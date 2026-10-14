@@ -22,6 +22,15 @@ Content-Length: 559
 
 4. Compare as duas saídas: o que mudou e o que não mudou?
 
+Antes da alteração, o servidor retornava o cabeçalho Content-Type: text/html; charset=UTF-8, indicando que a resposta era HTML.
+
+Depois de descomentar o header(), o cabeçalho passou a ser Content-Type: application/json; charset=utf-8, informando que o conteúdo retornado é JSON.
+
+O que mudou foi o tipo de conteúdo declarado no cabeçalho HTTP. O corpo da resposta permaneceu igual, contendo as informações da disciplina, do status e da quantidade de alunos.
+
+Portanto, a função header() define como o navegador deve interpretar o conteúdo da resposta, enquanto json_encode() converte os dados PHP para o formato JSON.
 
 5. Retire o JSON_UNESCAPED_UNICODE, repita o curl e explique o que aconteceu com Pro-
 gramação. Depois devolva a opção ao código.
+
+Ao retirar a opção JSON_UNESCAPED_UNICODE, os caracteres acentuados da palavra Programação passaram a ser representados por sequências Unicode, como \u00e7 e \u00e3. Isso acontece porque, por padrão, o json_encode() escapa esses caracteres. Os dados não foram perdidos: o JSON continua válido. Depois do teste, a opção foi adicionada novamente para manter os caracteres acentuados visíveis na resposta.
