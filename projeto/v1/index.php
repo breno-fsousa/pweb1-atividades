@@ -48,8 +48,6 @@ if (isset($_GET['tema'])) {
 
 // ------------------------------------------------------------
 // Rota JSON (?formato=json)
-// Devolve perfil e projetos em JSON e encerra sem enviar HTML.
-// Precisa vir ANTES de qualquer saída HTML.
 // ------------------------------------------------------------
 if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
     header('Content-Type: application/json; charset=utf-8');
@@ -81,12 +79,11 @@ if ($pagina == 'projeto') {
         $projetoAtual = $projetos[$id];
     } else {
         http_response_code(404);
-        $erro = 'projeto'; // "Projeto não encontrado"
+        $erro = 'projeto';
     }
 } elseif (!in_array($pagina, ['inicio', 'habilidades', 'projetos'])) {
-    // Qualquer página que não seja uma das conhecidas → 404
     http_response_code(404);
-    $erro = 'pagina'; // "Página não encontrada"
+    $erro = 'pagina';
 }
 
 // Texto e link do botão de troca de tema
@@ -99,6 +96,9 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Estudante | <?= htmlspecialchars($perfil['nome']) ?></title>
+
+    <!-- CSS separado (R1) — o visual fica em estilo.css -->
+    <link rel="stylesheet" href="estilo.css">
 </head>
 <body class="tema-<?= htmlspecialchars($tema) ?>">
 
@@ -151,8 +151,6 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
         <?php elseif ($pagina == 'habilidades'): ?>
 
             <h2>Habilidades</h2>
-
-            <!-- implode junta os itens em uma única string; count conta os itens -->
             <p><?= htmlspecialchars(implode(' , ', $perfil['habilidades'])) ?></p>
 
             <p>Total de habilidades: <?= count($perfil['habilidades']) ?></p>
