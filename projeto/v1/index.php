@@ -34,7 +34,27 @@ $projetos = [
     ],
 ];
 
+
 $pagina = $_GET['pagina'] ?? 'inicio';
+
+
+$projetoAtual = null;
+$erro         = null; // null | 'projeto' | 'pagina'
+
+if ($pagina == 'projeto') {
+    $id = (int) ($_GET['id'] ?? 0);
+
+    if (isset($projetos[$id])) {
+        $projetoAtual = $projetos[$id];
+    } else {
+        http_response_code(404);
+        $erro = 'projeto'; // "Projeto não encontrado"
+    }
+} elseif (!in_array($pagina, ['inicio', 'habilidades', 'projetos'])) {
+    // Qualquer página que não seja uma das conhecidas → 404
+    http_response_code(404);
+    $erro = 'pagina'; // "Página não encontrada"
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -64,7 +84,19 @@ $pagina = $_GET['pagina'] ?? 'inicio';
     <!-- 6. Conteúdo da página escolhida -->
     <main>
 
-        <?php if ($pagina == 'inicio'): ?>
+        <?php if ($erro === 'projeto'): ?>
+
+            <h2>Projeto não encontrado</h2>
+            <p>O projeto de id <code><?= htmlspecialchars((string) ($_GET['id'] ?? '')) ?></code> não existe.</p>
+            <p><a href="?pagina=projetos">&larr; Voltar para a lista de projetos</a></p>
+
+        <?php elseif ($erro === 'pagina'): ?>
+
+            <h2>Página não encontrada</h2>
+            <p>A página <code><?= htmlspecialchars($pagina) ?></code> não existe.</p>
+            <p><a href="?pagina=inicio">&larr; Voltar para o início</a></p>
+
+        <?php elseif ($pagina == 'inicio'): ?>
 
             <h2>Sobre mim</h2>
             <p><?= htmlspecialchars($perfil['apresentacao']) ?></p>
@@ -102,10 +134,12 @@ $pagina = $_GET['pagina'] ?? 'inicio';
                 <?php endforeach; ?>
             </ul>
 
-        <?php else: ?>
+        <?php elseif ($pagina == 'projeto' && $projetoAtual !== null): ?>
 
-            <h2>Página não encontrada</h2>
-            <p>A página <code><?= htmlspecialchars($pagina) ?></code> não existe.</p>
+            <h2><?= htmlspecialchars($projetoAtual['titulo']) ?></h2>
+            <p><?= htmlspecialchars($projetoAtual['descricao']) ?></p>
+            <p><strong>Tecnologias:</strong> <?= htmlspecialchars($projetoAtual['tecnologias']) ?></p>
+            <p><a href="?pagina=projetos">&larr; Voltar para a lista de projetos</a></p>
 
         <?php endif; ?>
 
