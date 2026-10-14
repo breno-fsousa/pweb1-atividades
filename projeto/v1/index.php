@@ -15,6 +15,26 @@ $perfil = [
         'Git e GitHub',
     ],
 ];
+
+$projetos = [
+    1 => [
+        'titulo'      => 'aguarde...',
+        'descricao'   => 'aguarde...',
+        'tecnologias' => 'PHP, HTML',
+    ],
+    2 => [
+        'titulo'      => 'aguarde...',
+        'descricao'   => 'aguarde...',
+        'tecnologias' => 'PHP, HTML, CSS',
+    ],
+    3 => [
+        'titulo'      => 'aguarde...',
+        'descricao'   => 'aguarde...',
+        'tecnologias' => 'HTML, CSS',
+    ],
+];
+
+$pagina = $_GET['pagina'] ?? 'inicio';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -25,7 +45,7 @@ $perfil = [
 </head>
 <body>
 
-    <!-- 5. Cabeçalho (nome e curso) -->
+    <!-- 5. Cabeçalho e menu (mesmo em todas as páginas) -->
     <header>
         <h1><?= htmlspecialchars($perfil['nome']) ?></h1>
         <p>
@@ -33,24 +53,67 @@ $perfil = [
             &mdash;
             <?= htmlspecialchars($perfil['campus']) ?>
         </p>
+
+        <nav>
+            <a href="?pagina=inicio">Início</a> |
+            <a href="?pagina=habilidades">Habilidades</a> |
+            <a href="?pagina=projetos">Projetos</a>
+        </nav>
     </header>
 
-    <!-- 6. Conteúdo da página inicial -->
+    <!-- 6. Conteúdo da página escolhida -->
     <main>
-        <h2>Sobre mim</h2>
-        <p><?= htmlspecialchars($perfil['apresentacao']) ?></p>
 
-        <h2>Dados</h2>
-        <ul>
-            <li><strong>Curso:</strong>   <?= htmlspecialchars($perfil['curso']) ?></li>
-            <li><strong>Campus:</strong>  <?= htmlspecialchars($perfil['campus']) ?></li>
-            <li><strong>Cidade:</strong>  <?= htmlspecialchars($perfil['cidade']) ?></li>
-        </ul>
+        <?php if ($pagina == 'inicio'): ?>
+
+            <h2>Sobre mim</h2>
+            <p><?= htmlspecialchars($perfil['apresentacao']) ?></p>
+
+            <h2>Dados</h2>
+            <ul>
+                <li><strong>Curso:</strong>   <?= htmlspecialchars($perfil['curso']) ?></li>
+                <li><strong>Campus:</strong>  <?= htmlspecialchars($perfil['campus']) ?></li>
+                <li><strong>Cidade:</strong>  <?= htmlspecialchars($perfil['cidade']) ?></li>
+            </ul>
+
+        <?php elseif ($pagina == 'habilidades'): ?>
+
+            <h2>Habilidades</h2>
+
+            <!-- implode junta os itens em uma única string; count conta os itens -->
+            <p><?= htmlspecialchars(implode(' , ', $perfil['habilidades'])) ?></p>
+
+            <p>Total de habilidades: <?= count($perfil['habilidades']) ?></p>
+
+        <?php elseif ($pagina == 'projetos'): ?>
+
+            <h2>Projetos</h2>
+            <p>Ao todo, <?= count($projetos) ?> projetos cadastrados.</p>
+
+            <ul>
+                <?php foreach ($projetos as $id => $projeto): ?>
+                    <li>
+                        <a href="?pagina=projeto&amp;id=<?= (int) $id ?>">
+                            <?= htmlspecialchars($projeto['titulo']) ?>
+                        </a>
+                        &mdash;
+                        <?= htmlspecialchars($projeto['tecnologias']) ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+        <?php else: ?>
+
+            <h2>Página não encontrada</h2>
+            <p>A página <code><?= htmlspecialchars($pagina) ?></code> não existe.</p>
+
+        <?php endif; ?>
+
     </main>
 
     <!-- 7. Rodapé -->
     <footer>
-        <p>&copy; <?= date('Y') ?> <?= htmlspecialchars($perfil['nome']) ?></p>
+        <p>&copy; <?= date('2026') ?> <?= htmlspecialchars($perfil['nome']) ?></p>
     </footer>
 
 </body>
