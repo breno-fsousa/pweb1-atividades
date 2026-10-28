@@ -1,0 +1,218 @@
+/* ============================================================
+   projeto/v1/estilo.css
+   Visual da v1 do Perfil do Estudante
+   - Dois temas (claro / escuro) via variáveis CSS
+   - Aplicado pela classe no <body>: .tema-claro ou .tema-escuro
+   ============================================================ */
+
+/* ---------- Variáveis dos temas ---------- */
+.tema-claro {
+    --fundo:        #f5f7f6;
+    --superficie:   #ffffff;
+    --texto:        #1e2a24;
+    --texto-suave:  #55625b;
+    --destaque:     #1e7a4b;
+    --destaque-2:   #0f5333;
+    --borda:        #d9e1dc;
+    --sombra:       0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.tema-escuro {
+    --fundo:        #141a17;
+    --superficie:   #1c2421;
+    --texto:        #e6ece8;
+    --texto-suave:  #9aa8a1;
+    --destaque:     #4ccf8a;
+    --destaque-2:   #7ce0a9;
+    --borda:        #2a332f;
+    --sombra:       0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Reset básico ---------- */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- Corpo ---------- */
+body {
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* Transição suave ao trocar de tema */
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ---------- Cabeçalho ---------- */
+header {
+    background: var(--superficie);
+    border-bottom: 1px solid var(--borda);
+    padding: 1.5rem 1.25rem 1rem;
+    box-shadow: var(--sombra);
+}
+
+header h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.7rem;
+    color: var(--destaque);
+    letter-spacing: -0.01em;
+}
+
+header p {
+    margin: 0;
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+}
+
+/* ---------- Menu ---------- */
+header nav {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+header nav a {
+    color: var(--texto);
+    text-decoration: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+header nav a:hover {
+    background: var(--fundo);
+    border-color: var(--borda);
+    color: var(--destaque);
+}
+
+/* O link de troca de tema fica com destaque */
+header nav a:last-child {
+    margin-left: auto;
+    border-color: var(--borda);
+    color: var(--destaque);
+}
+
+header nav a:last-child:hover {
+    background: var(--destaque);
+    color: var(--fundo);
+    border-color: var(--destaque);
+}
+
+/* ---------- Conteúdo principal ---------- */
+main {
+    flex: 1;
+    width: 100%;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem;
+}
+
+main h2 {
+    color: var(--destaque);
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    border-left: 4px solid var(--destaque);
+    padding-left: 0.6rem;
+}
+
+main h2:first-child {
+    margin-top: 0;
+}
+
+main p {
+    margin: 0.6rem 0;
+}
+
+/* ---------- Lista de dados ---------- */
+main ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0;
+}
+
+main ul li {
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 0.5rem;
+    box-shadow: var(--sombra);
+}
+
+/* ---------- Links ---------- */
+main a {
+    color: var(--destaque);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+main a:hover {
+    text-decoration: underline;
+    color: var(--destaque-2);
+}
+
+/* ---------- Código inline (usado em mensagens de erro) ---------- */
+main code {
+    background: var(--fundo);
+    border: 1px solid var(--borda);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 0.9em;
+}
+
+/* ---------- Rodapé ---------- */
+footer {
+    background: var(--superficie);
+    border-top: 1px solid var(--borda);
+    padding: 1.25rem;
+    text-align: center;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin: 0.25rem 0;
+}
+
+footer strong {
+    color: var(--destaque);
+}
+
+footer a {
+    color: var(--destaque);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Responsivo simples ---------- */
+@media (max-width: 560px) {
+    header h1 {
+        font-size: 1.35rem;
+    }
+
+    header nav a:last-child {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    main {
+        padding: 1.25rem 1rem;
+    }
+}
