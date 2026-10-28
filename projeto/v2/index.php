@@ -104,9 +104,7 @@ class Perfil
     }
 }
 
-// ------------------------------------------------------------
 // 2. Os objetos
-// ------------------------------------------------------------
 $perfil = new Perfil(
     'Breno França de Sousa',
     'Tecnologia em Análise e Desenvolvimento de Sistemas',
@@ -135,41 +133,15 @@ if (isset($_GET['tema'])) {
 }
 
 // 4. Rota JSON (?formato=json)
+
 if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
     header('Content-Type: application/json; charset=utf-8');
-
-    $projetosArr = [];
-    foreach ($perfil->getProjetos() as $id => $projeto) {
-        $projetosArr[$id] = [
-            'titulo'      => $projeto->getTitulo(),
-            'descricao'   => $projeto->getDescricao(),
-            'tecnologias' => $projeto->getTecnologias(),
-        ];
-    }
-
-    $dados = [
-        'perfil' => [
-            'nome'         => $perfil->getNome(),
-            'curso'        => $perfil->getCurso(),
-            'campus'       => $perfil->getCampus(),
-            'cidade'       => $perfil->getCidade(),
-            'apresentacao' => $perfil->getApresentacao(),
-            'habilidades'  => $perfil->getHabilidades(),
-        ],
-        'projetos' => $projetosArr,
-    ];
-
-    echo json_encode($dados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    echo json_encode($perfil->paraArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// ------------------------------------------------------------
 // 5. Qual página mostrar
-//
-// R5: o 404 do projeto agora vem de try/catch em getProjeto().
-// Quem sabe se o projeto existe é o Perfil — o index.php só
-// chama o getter e trata a exceção.
-// ------------------------------------------------------------
+// R5: o 404 do projeto vem de try/catch em getProjeto().
 $pagina = $_GET['pagina'] ?? 'inicio';
 
 $projetoAtual = null;
@@ -227,7 +199,6 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
 
         <?php if ($erro === 'projeto'): ?>
 
-            <!-- O título do 404 vem da mensagem da exceção de Projeto -->
             <h2><?= htmlspecialchars($erroMensagem) ?></h2>
             <p>O projeto de id <code><?= htmlspecialchars((string) ($_GET['id'] ?? '')) ?></code> não existe.</p>
             <p><a href="?pagina=projetos">&larr; Voltar para a lista de projetos</a></p>
