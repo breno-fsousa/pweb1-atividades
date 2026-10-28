@@ -105,7 +105,7 @@ class Perfil
 }
 
 // ------------------------------------------------------------
-// 2. Os objetos (substituem os arrays da v1)
+// 2. Os objetos
 // ------------------------------------------------------------
 $perfil = new Perfil(
     'Breno França de Sousa',
@@ -134,7 +134,6 @@ if (isset($_GET['tema'])) {
     setcookie('tema', $tema, time() + (30 * 24 * 60 * 60), '/');
 }
 
-// ------------------------------------------------------------
 // 4. Rota JSON (?formato=json)
 if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
     header('Content-Type: application/json; charset=utf-8');
@@ -164,22 +163,28 @@ if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
     exit;
 }
 
+// ------------------------------------------------------------
 // 5. Qual página mostrar
-
+//
+// R5: o 404 do projeto agora vem de try/catch em getProjeto().
+// Quem sabe se o projeto existe é o Perfil — o index.php só
+// chama o getter e trata a exceção.
+// ------------------------------------------------------------
 $pagina = $_GET['pagina'] ?? 'inicio';
 
 $projetoAtual = null;
-$erro         = null; // null | 'projeto' | 'pagina'
+$erro         = null;     // null | 'projeto' | 'pagina'
+$erroMensagem = null;     // mensagem vinda da exceção de Projeto
 
 if ($pagina == 'projeto') {
     $id = (int) ($_GET['id'] ?? 0);
-    $listaProjetos = $perfil->getProjetos();
 
-    if (isset($listaProjetos[$id])) {
-        $projetoAtual = $listaProjetos[$id];
-    } else {
+    try {
+        $projetoAtual = $perfil->getProjeto($id);
+    } catch (Exception $e) {
         http_response_code(404);
-        $erro = 'projeto';
+        $erro         = 'projeto';
+        $erroMensagem = $e->getMessage(); // 'Projeto não encontrado'
     }
 } elseif (!in_array($pagina, ['inicio', 'habilidades', 'projetos'])) {
     http_response_code(404);
@@ -222,7 +227,8 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
 
         <?php if ($erro === 'projeto'): ?>
 
-            <h2>Projeto não encontrado</h2>
+            <!-- O título do 404 vem da mensagem da exceção de Projeto -->
+            <h2><?= htmlspecialchars($erroMensagem) ?></h2>
             <p>O projeto de id <code><?= htmlspecialchars((string) ($_GET['id'] ?? '')) ?></code> não existe.</p>
             <p><a href="?pagina=projetos">&larr; Voltar para a lista de projetos</a></p>
 
