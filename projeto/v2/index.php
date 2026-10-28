@@ -35,8 +35,6 @@ class Projeto
         return $this->tecnologias;
     }
 
-    // Será usado na rota JSON no commit "gera o JSON com paraArray()".
-    // json_encode($projeto) devolveria {} porque os atributos são private.
     public function paraArray(): array
     {
         return [
@@ -47,8 +45,87 @@ class Projeto
     }
 }
 
+class Perfil
+{
+    private string $nome;
+    private string $curso;
+    private string $campus;
+    private string $cidade;
+    private string $apresentacao;
+    private array  $habilidades;
+    private array  $projetos = []; // começa vazio; projetos vêm de adicionarProjeto()
+
+    public function __construct(
+        string $nome,
+        string $curso,
+        string $campus,
+        string $cidade,
+        string $apresentacao,
+        array $habilidades
+    ) {
+        // R3: menos de 5 habilidades lança exceção ANTES do objeto existir
+        if (count($habilidades) < 5) {
+            throw new Exception('O perfil precisa de pelo menos 5 habilidades');
+        }
+
+        $this->nome         = $nome;
+        $this->curso        = $curso;
+        $this->campus       = $campus;
+        $this->cidade       = $cidade;
+        $this->apresentacao = $apresentacao;
+        $this->habilidades  = $habilidades;
+    }
+
+    // Adiciona um projeto no final, numerando a partir de 1.
+    // Aceita qualquer objeto que seja um Projeto (inclusive subclasses).
+    public function adicionarProjeto(Projeto $projeto): void
+    {
+        $this->projetos[count($this->projetos) + 1] = $projeto;
+    }
+
+    // Devolve o projeto com o $id informado; se não existir, lança exceção.
+    // Quem chama é obrigado a tratar (try/catch) — é o que o R5 pede.
+    public function getProjeto(int $id): Projeto
+    {
+        if (!isset($this->projetos[$id])) {
+            throw new Exception('Projeto não encontrado');
+        }
+
+        return $this->projetos[$id];
+    }
+
+    // Getters — o HTML só acessa os dados por aqui (R6)
+    public function getNome(): string         { return $this->nome; }
+    public function getCurso(): string        { return $this->curso; }
+    public function getCampus(): string       { return $this->campus; }
+    public function getCidade(): string       { return $this->cidade; }
+    public function getApresentacao(): string { return $this->apresentacao; }
+    public function getHabilidades(): array   { return $this->habilidades; }
+    public function getProjetos(): array      { return $this->projetos; }
+
+    // Serializa o Perfil inteiro, convertendo cada projeto pelo seu próprio paraArray().
+    // Usado na rota JSON (R7).
+    public function paraArray(): array
+    {
+        $projetosArray = [];
+        foreach ($this->projetos as $id => $projeto) {
+            $projetosArray[$id] = $projeto->paraArray();
+        }
+
+        return [
+            'nome'         => $this->nome,
+            'curso'        => $this->curso,
+            'campus'       => $this->campus,
+            'cidade'       => $this->cidade,
+            'apresentacao' => $this->apresentacao,
+            'habilidades'  => $this->habilidades,
+            'projetos'     => $projetosArray,
+        ];
+    }
+}
+
 // ------------------------------------------------------------
-// 2. Arrays
+// 2. Arrays da v1 (ainda no lugar — saem no próximo commit)
 // ------------------------------------------------------------
 $perfil = [
     'nome'         => 'Breno França de Sousa',
@@ -85,7 +162,7 @@ $projetos = [
 ];
 
 // ------------------------------------------------------------
-// 3. Tema claro ou escuro (igual à v1)
+// 3. Tema claro ou escuro
 // ------------------------------------------------------------
 $tema = $_GET['tema'] ?? $_COOKIE['tema'] ?? 'claro';
 
