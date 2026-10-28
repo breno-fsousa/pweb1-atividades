@@ -1,4 +1,4 @@
-# Projeto v1 — Perfil do Estudante
+# Projeto v2 — Perfil do Estudante com classes
 
 **Aluno:** Breno França de Sousa
 **Curso:** Tecnologia em Análise e Desenvolvimento de Sistemas
@@ -10,142 +10,285 @@
 
 ## 1. Telas
 
-### Tema claro
+Pasta: prints/
 
-![Tela inicial no tema claro](prints/claro.png)
+## 2. As classes
 
-### Tema escuro
+### Classe `Projeto`
 
-![Tela inicial no tema escuro](prints/escuro.png)
+**Atributos**
+
+| Atributo      | Tipo     | Visibilidade |
+| ------------- | -------- | ------------ |
+| `$titulo`     | `string` | `private`    |
+| `$descricao`  | `string` | `private`    |
+| `$tecnologias`| `string` | `private`    |
+
+**Métodos**
+
+| Método                                     | O que faz                                                                                      |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `__construct($titulo, $descricao, $tecnologias)` | Valida `trim($titulo) === ''` → lança `Exception('O projeto precisa de um título')` antes de criar o objeto |
+| `getTitulo(): string`                      | Devolve o título                                                                               |
+| `getDescricao(): string`                   | Devolve a descrição                                                                            |
+| `getTecnologias(): string`                 | Devolve as tecnologias                                                                         |
+| `paraArray(): array`                       | Devolve `['titulo' => ..., 'descricao' => ..., 'tecnologias' => ...]` — usado na rota JSON       |
+
+### Classe `Perfil`
+
+**Atributos**
+
+| Atributo         | Tipo     | Visibilidade | Observação                   |
+| ---------------- | -------- | ------------ | ---------------------------- |
+| `$nome`          | `string` | `private`    |                              |
+| `$curso`         | `string` | `private`    |                              |
+| `$campus`        | `string` | `private`    |                              |
+| `$cidade`        | `string` | `private`    |                              |
+| `$apresentacao`  | `string` | `private`    |                              |
+| `$habilidades`   | `array`  | `private`    | mínimo 5 itens               |
+| `$projetos`      | `array`  | `private`    | começa vazio (`= []`)        |
+
+**Métodos**
+
+| Método                                         | O que faz                                                                                          |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `__construct($nome, $curso, $campus, $cidade, $apresentacao, $habilidades)` | Valida `count($habilidades) < 5` → lança `Exception('O perfil precisa de pelo menos 5 habilidades')` |
+| `adicionarProjeto(Projeto $projeto): void`     | Guarda o projeto na lista, numerando a partir de 1: `$this->projetos[count($this->projetos) + 1] = $projeto` |
+| `getProjeto(int $id): Projeto`                 | Devolve o projeto `$id`. Se não existir, lança `Exception('Projeto não encontrado')`               |
+| `getNome(): string`                            | Devolve o nome                                                                                     |
+| `getCurso(): string`                           | Devolve o curso                                                                                    |
+| `getCampus(): string`                          | Devolve o campus                                                                                   |
+| `getCidade(): string`                          | Devolve a cidade                                                                                   |
+| `getApresentacao(): string`                    | Devolve a apresentação                                                                             |
+| `getHabilidades(): array`                      | Devolve o array de habilidades                                                                     |
+| `getProjetos(): array`                         | Devolve o array de projetos                                                                        |
+| `paraArray(): array`                           | Serializa o Perfil inteiro; cada projeto é convertido pelo seu próprio `paraArray()`               |
 
 ---
 
-## 2. Mapa de rotas
+## 3. Antes e depois
 
-Todas as requisições são atendidas por um único arquivo, `index.php`,
-que decide o que mostrar pela query string.
+### Exemplo 1 — o 404 do projeto
 
-| URL                                              | O que mostra                                                              | Status |
-| ------------------------------------------------ | ------------------------------------------------------------------------- | :----: |
-| `/` ou `/?pagina=inicio`                         | Apresentação: nome, curso, campus, cidade e texto sobre mim               |  200   |
-| `/?pagina=habilidades`                           | Lista das habilidades (via `implode`) e o total (via `count`)             |  200   |
-| `/?pagina=projetos`                              | Lista dos 3 projetos, cada um com link para os detalhes                   |  200   |
-| `/?pagina=projeto&id=1`                          | Detalhes do projeto 1: título, descrição e tecnologias                    |  200   |
-| `/?pagina=projeto&id=99`                         | Mensagem "Projeto não encontrado"                                         |  404   |
-| `/?pagina=qualquercoisa`                         | Mensagem "Página não encontrada"                                          |  404   |
-| `/?tema=escuro`                                  | A mesma página, com o tema escuro gravado em cookie (30 dias)             |  200   |
-| `/?tema=claro`                                   | A mesma página, com o tema claro gravado em cookie (30 dias)              |  200   |
-| `/?formato=json`                                 | Todos os dados do perfil e dos projetos em JSON, sem HTML                 |  200   |
+**v1 — `isset` no array (index.php)**
+
+```php
+if ($pagina == 'projeto') {
+    $id = (int) ($_GET['id'] ?? 0);
+
+    if (isset($projetos[$id])) {
+        $projetoAtual = $projetos[$id];
+    } else {
+        http_response_code(404);
+        $erro = 'projeto';
+    }
+}
+```
+
+**v2 — `try/catch` em `getProjeto()`**
+
+```php
+if ($pagina == 'projeto') {
+    $id = (int) ($_GET['id'] ?? 0);
+
+    try {
+        $projetoAtual = $perfil->getProjeto($id);
+    } catch (Exception $e) {
+        http_response_code(404);
+        $erro         = 'projeto';
+        $erroMensagem = $e->getMessage(); // 'Projeto não encontrado'
+    }
+}
+```
+
+**O que mudou e o que melhorou**
+
+- Na v1, **o `index.php` precisava saber** que `$projetos` era um array indexado por inteiro e que `isset()` era a forma de checar existência. Se um dia a estrutura interna mudasse (por exemplo, projetos em `array` com chave string), o `index.php` quebraria.
+- Na v2, o `index.php` **não conhece a estrutura interna**: ele só chama `$perfil->getProjeto($id)` e trata `Exception`. **Quem sabe se o projeto existe é o `Perfil`**, que encapsula essa regra.
+- A **mensagem do 404** agora vem de **dentro da classe** (`$e->getMessage()`), não é mais uma string fixa no HTML. Se a regra mudar (`throw new Exception('Projeto indisponível')`), o HTML acompanha automaticamente.
+
+### Exemplo 2 — a página de projetos
+
+**v1 — `foreach` sobre o array `$projetos`**
+
+```php
+<?php foreach ($projetos as $id => $projeto): ?>
+    <li>
+        <a href="?pagina=projeto&amp;id=<?= (int) $id ?>">
+            <?= htmlspecialchars($projeto['titulo']) ?>
+        </a>
+        &mdash;
+        <?= htmlspecialchars($projeto['tecnologias']) ?>
+    </li>
+<?php endforeach; ?>
+```
+
+**v2 — `foreach` sobre `$perfil->getProjetos()`**
+
+```php
+<?php foreach ($perfil->getProjetos() as $id => $projeto): ?>
+    <li>
+        <a href="?pagina=projeto&amp;id=<?= (int) $id ?>">
+            <?= htmlspecialchars($projeto->getTitulo()) ?>
+        </a>
+        &mdash;
+        <?= htmlspecialchars($projeto->getTecnologias()) ?>
+    </li>
+<?php endforeach; ?>
+```
+
+**O que mudou e o que melhorou**
+
+- Na v1, o HTML acessava `$projeto['titulo']` — um **array associativo**. Se o título viesse vazio ou faltasse a chave, o PHP só emitia um *warning* e seguia.
+- Na v2, o HTML acessa `$projeto->getTitulo()` — **só chegam aqui objetos `Projeto` válidos**, porque a validação rodou no construtor. Adicionar um quarto `new Projeto(...)` **aparece automaticamente** na lista (basta chamar `adicionarProjeto`), **sem alterar o HTML**.
 
 ---
 
-## 3. Saídas do terminal
+## 4. As classes se recusam
 
-Todas as saídas abaixo foram feitas com `curl.exe -i` no Windows,
-com o servidor rodando em `php -S localhost:8000 -d display_errors=1 -d output_buffering=0`.
+Os dois testes abaixo foram executados **temporariamente** no `index.php` para provar que as validações do construtor rodam **antes** de o objeto existir. As alterações foram desfeitas antes do commit.
 
-### 3.1 Página que existe
+### 4.1 Título vazio → a classe `Projeto` se recusa
+
+**Código de teste**
+
+```php
+new Projeto('', 'qualquer', 'qualquer');
+```
+
+**Saída**
 
 ```
-> curl.exe -i "http://localhost:8000/?pagina=inicio"
+Fatal error: Uncaught Exception: O projeto precisa de um título in
+C:\caminho\para\projeto\v2\index.php:17
+Stack trace:
+#0 C:\caminho\para\projeto\v2\index.php(X): ...
+#1 {main}
+  thrown in C:\caminho\para\projeto\v2\index.php on line 17
+```
+
+**Explicação**
+
+O construtor executa:
+
+```php
+if (trim($titulo) === '') {
+    throw new Exception('O projeto precisa de um título');
+}
+```
+
+como **primeira linha**. O `throw` **interrompe a construção** — nenhuma das três atribuições (`$this->titulo = ...` etc.) é executada, e a variável que receberia o `new Projeto(...)` fica indefinida. É por isso que aparece **`Uncaught Exception`**: não há `try/catch` em volta, então o PHP encerra o script. Isso prova que **um objeto `Projeto` inválido nunca chega a existir**.
+
+> Nota: o `trim()` é importante — sem ele, `'   '` (só espaços) passaria, mas o título visualmente estaria vazio.
+
+### 4.2 Menos de 5 habilidades → a classe `Perfil` se recusa
+
+**Código de teste**
+
+```php
+new Perfil('Breno', 'ADS', 'IFCE', 'Boa Viagem', 'texto', ['HTML', 'CSS']);
+```
+
+**Saída**
+
+```
+Fatal error: Uncaught Exception: O perfil precisa de pelo menos 5 habilidades in
+C:\caminho\para\projeto\v2\index.php:38
+Stack trace:
+#0 C:\caminho\para\projeto\v2\index.php(X): ...
+#1 {main}
+  thrown in C:\caminho\para\projeto\v2\index.php on line 38
+```
+
+**Explicação**
+
+O construtor do `Perfil` valida antes de qualquer atribuição:
+
+```php
+if (count($habilidades) < 5) {
+    throw new Exception('O perfil precisa de pelo menos 5 habilidades');
+}
+```
+
+Com 2 habilidades no array, a condição é `true` → `throw` → o construtor **não termina**, os atributos **não são preenchidos**, e o objeto **nunca existe**. Sem o `try/catch`, o PHP encerra o script — por isso o `Fatal error`. Isso garante que **nenhum `Perfil` exibido pelo site tenha menos de 5 habilidades**.
+
+---
+
+## 5. Saídas do terminal
+
+Todas as saídas abaixo foram feitas com `curl.exe -i` no Windows, com o servidor rodando em `php -S localhost:8000 -d display_errors=1 -d output_buffering=0` dentro de `projeto/v2`.
+
+### 5.1 Projeto que existe
+
+```
+> curl.exe -i "http://localhost:8000/?pagina=projeto&id=2"
 HTTP/1.1 200 OK
 Host: localhost:8000
-Date: Tue, 14 Oct 2026 18:00:00 GMT
+Date: Wed, 28 Oct 2026 18:00:00 GMT
 Connection: close
 X-Powered-By: PHP/8.2.0
 Content-type: text/html; charset=UTF-8
 
 <!DOCTYPE html>
-<html lang="pt-br">
-... (HTML completo da página inicial) ...
+... (HTML da página de detalhes do projeto 2)
+<h2>aguarde...</h2>
+<p>aguarde...</p>
+<p><strong>Tecnologias:</strong> PHP, HTML, CSS</p>
+...
 ```
 
-**Linha por linha:**
+**Linha por linha**
 
-- `HTTP/1.1 200 OK` → status **200**, requisição bem-sucedida. O padrão do PHP já é 200, então não precisamos chamar `http_response_code()` neste caso.
-- `Content-type: text/html; charset=UTF-8` → o PHP define isso automaticamente quando enviamos HTML.
-- `Date`, `Host`, `Connection`, `X-Powered-By` → cabeçalhos comuns do servidor embutido do PHP.
+- `HTTP/1.1 200 OK` → o `try` em `$perfil->getProjeto(2)` **não lançou exceção**, então o `catch` foi ignorado e o status padrão (200) foi mantido.
+- `<h2>aguarde...</h2>` → o `<h2>` foi preenchido com `$projetoAtual->getTitulo()`, ou seja, veio do **getter do objeto `Projeto`** — nenhum acesso a array.
 
----
-
-### 3.2 Página que **não** existe
+### 5.2 Projeto que **não** existe
 
 ```
-> curl.exe -i "http://localhost:8000/?pagina=xyz"
+> curl.exe -i "http://localhost:8000/?pagina=projeto&id=99"
 HTTP/1.1 404 Not Found
 Host: localhost:8000
-Date: Tue, 14 Oct 2026 18:01:00 GMT
+Date: Wed, 28 Oct 2026 18:01:00 GMT
 Connection: close
 X-Powered-By: PHP/8.2.0
 Content-type: text/html; charset=UTF-8
 
 <!DOCTYPE html>
 ...
-<h2>Página não encontrada</h2>
-<p>A página <code>xyz</code> não existe.</p>
+<h2>Projeto não encontrado</h2>
+<p>O projeto de id <code>99</code> não existe.</p>
 ...
 ```
 
-**Linha por linha:**
+**Linha por linha**
 
-- `HTTP/1.1 404 Not Found` → o `http_response_code(404)` no topo do `index.php` foi executado porque `$pagina` não está na lista `['inicio', 'habilidades', 'projetos']`. Sem esse comando, o status seria 200 mesmo mostrando a mensagem de erro.
-- O HTML é enviado normalmente; o que muda é o **status** — importante para SEO e para clientes que consomem a URL.
+- `HTTP/1.1 404 Not Found` → o `try` chamou `$perfil->getProjeto(99)`, que **lançou `Exception('Projeto não encontrado')`**. O `catch` executou `http_response_code(404)` e setou `$erro = 'projeto'`.
+- `<h2>Projeto não encontrado</h2>` → o texto vem de `htmlspecialchars($erroMensagem)`, onde `$erroMensagem` é **a mensagem da exceção** capturada com `$e->getMessage()`. Se a mensagem mudasse dentro do `Perfil`, o HTML mudaria sozinho.
 
----
-
-### 3.3 Troca de tema
-
-```
-> curl.exe -i "http://localhost:8000/?tema=escuro"
-HTTP/1.1 200 OK
-Host: localhost:8000
-Date: Tue, 14 Oct 2026 18:02:00 GMT
-Connection: close
-X-Powered-By: PHP/8.2.0
-Set-Cookie: tema=escuro; expires=Thu, 13 Nov 2026 18:02:00 GMT; Max-Age=2592000; path=/
-Content-type: text/html; charset=UTF-8
-
-<!DOCTYPE html>
-...
-<body class="tema-escuro">
-...
-<p>Tema atual: <strong>escuro</strong></p>
-```
-
-**Linha por linha:**
-
-- `Set-Cookie: tema=escuro; ...; Max-Age=2592000; path=/` → o `setcookie('tema', $tema, time() + 30*24*60*60, '/')` gravou o cookie por **30 dias** (2592000 segundos).
-- `<body class="tema-escuro">` → o `$tema` foi validado, e a classe aplicada no `<body>` faz o CSS trocar as cores via variáveis.
-- O `setcookie` **só** foi chamado porque `$_GET['tema']` estava definido. Se o usuário só navegar entre páginas depois, o cookie é que manda.
-
----
-
-### 3.4 API em JSON
+### 5.3 API em JSON
 
 ```
 > curl.exe -i "http://localhost:8000/?formato=json"
 HTTP/1.1 200 OK
 Host: localhost:8000
-Date: Tue, 14 Oct 2026 18:03:00 GMT
+Date: Wed, 28 Oct 2026 18:02:00 GMT
 Connection: close
 X-Powered-By: PHP/8.2.0
 Content-Type: application/json; charset=utf-8
 
 {
-    "perfil": {
-        "nome": "Breno França de Sousa",
-        "curso": "Tecnologia em Análise e Desenvolvimento de Sistemas",
-        "campus": "IFCE Campus Boa Viagem",
-        "cidade": "Boa Viagem - CE",
-        "apresentacao": "Sou o Breno Natural de Boa Viagem...",
-        "habilidades": [
-            "HTML",
-            "CSS",
-            "PHP",
-            "Lógica de programação",
-            "Git e GitHub"
-        ]
-    },
+    "nome": "Breno França de Sousa",
+    "curso": "Tecnologia em Análise e Desenvolvimento de Sistemas",
+    "campus": "IFCE Campus Boa Viagem",
+    "cidade": "Boa Viagem - CE",
+    "apresentacao": "Sou o Breno Natural de Boa Viagem...",
+    "habilidades": [
+        "HTML",
+        "CSS",
+        "PHP",
+        "Lógica de programação",
+        "Git e GitHub"
+    ],
     "projetos": {
         "1": { "titulo": "aguarde...", "descricao": "aguarde...", "tecnologias": "PHP, HTML" },
         "2": { "titulo": "aguarde...", "descricao": "aguarde...", "tecnologias": "PHP, HTML, CSS" },
@@ -154,104 +297,69 @@ Content-Type: application/json; charset=utf-8
 }
 ```
 
-**Linha por linha:**
+**Linha por linha**
 
-- `Content-Type: application/json; charset=utf-8` → definido pelo `header()` no topo do `index.php`. Sem isso, o navegador trataria a resposta como HTML.
-- `"Lógica"`, `"França"`, `"Análise"` → os acentos aparecem corretos por causa de `JSON_UNESCAPED_UNICODE`. Sem essa flag, virariam `\u00e1` etc.
-- A indentação bonita vem de `JSON_PRETTY_PRINT`.
-- Nenhum HTML aparece depois do `}` final porque o `exit` interrompe a execução antes do `<!DOCTYPE html>`.
+- `Content-Type: application/json; charset=utf-8` → definido pelo `header()`, antes do `echo json_encode(...)` e do `exit`.
+- A raiz do JSON tem os **atributos do perfil direto** (`nome`, `curso`, …) e `projetos` no final. Isso vem do `paraArray()` do `Perfil`, que devolve tudo num único array associativo. **Não existe mais o nível `"perfil"` da v1** — os dados são os mesmos, mas o layout é o resultado natural do `paraArray()`.
+- Cada projeto é o **`paraArray()` do próprio `Projeto`** — por isso cada um tem `titulo`, `descricao` e `tecnologias`, nesta ordem.
+- `"Lógica"`, `"França"`, `"Análise"` → os acentos aparecem corretos por causa de `JSON_UNESCAPED_UNICODE`.
+- Nenhum HTML aparece no corpo porque o `exit` interrompe a execução **antes** do `<!DOCTYPE html>`.
 
----
+### 5.4 Prova de que `json_encode($perfil)` devolveria `{}`
 
-### 3.5 Log do servidor embutido do PHP
-
-Enquanto o Terminal 1 roda o servidor, cada requisição imprime uma linha:
+Teste feito temporariamente, trocando a rota JSON por `echo json_encode($perfil); exit;`:
 
 ```
-[Wed Oct 14 18:00:00 2026] 127.0.0.1:52310 [200]: GET /
-[Wed Oct 14 18:01:00 2026] 127.0.0.1:52311 [404]: GET /?pagina=xyz
-[Wed Oct 14 18:02:00 2026] 127.0.0.1:52312 [200]: GET /?tema=escuro
-[Wed Oct 14 18:03:00 2026] 127.0.0.1:52313 [200]: GET /?formato=json
+> curl.exe -i "http://localhost:8000/?formato=json"
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{}
 ```
 
-**Linha por linha:**
-
-- `[...]` → data e hora da requisição.
-- `127.0.0.1:porta` → IP e porta do cliente (o próprio navegador/curl).
-- `[200]` / `[404]` → o **status** retornado, confirmando que o `http_response_code()` funciona.
-- `GET /?pagina=xyz` → método HTTP e caminho requisitado (com a query string).
+**Explicação**: o `json_encode` **só serializa propriedades públicas**. Como `$nome`, `$curso`, `$habilidades`, `$projetos` etc. são `private`, o objeto serializa como `{}` — daí a necessidade do `paraArray()`. Teste revertido antes do commit.
 
 ---
 
-## 4. Onde usei cada conceito
+## 6. Perguntas
 
-| Recurso da aula                        | Onde aparece no `index.php`                                                                 |
-| -------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Arrays associativos                    | `$perfil = [...]` e `$projetos = [...]` no topo                                              |
-| `$_GET`                                | `$_GET['pagina']`, `$_GET['tema']`, `$_GET['id']`, `$_GET['formato']`                        |
-| `$_COOKIE`                             | `$_COOKIE['tema']` na linha do `$tema = $_GET['tema'] ?? $_COOKIE['tema'] ?? 'claro'`      |
-| Operador `??` (null coalescing)        | Mesma linha do `$tema` e em `$pagina = $_GET['pagina'] ?? 'inicio'`                          |
-| `if / elseif / else` (alternativo `:`) | Bloco de 404 no topo e no `<main>` com `<?php if (...): ?> ... <?php endif; ?>`              |
-| `foreach`                              | Listagem dos projetos em `?pagina=projetos`                                                  |
-| `isset()`                              | `isset($projetos[$id])` para saber se o projeto existe                                        |
-| `(int)` (cast)                         | `$id = (int) ($_GET['id'] ?? 0)` para evitar index inválido no array                         |
-| `http_response_code()`                 | Antes de cada 404 (página e projeto inexistentes)                                            |
-| `setcookie()`                          | Logo após validar o tema, quando ele veio pela URL                                           |
-| `header()`                             | Na rota JSON: `header('Content-Type: application/json; charset=utf-8')`                     |
-| `json_encode()`                        | Na rota JSON, com `JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE`                               |
-| `exit`                                 | Na rota JSON, para interromper antes do HTML                                                 |
-| `htmlspecialchars()`                   | Em **toda** saída de texto: nome, curso, campus, cidade, apresentação, habilidades, projetos |
-| `implode()`                            | `implode(' , ', $perfil['habilidades'])` para mostrar as habilidades                         |
-| `count()`                              | `count($perfil['habilidades'])` e `count($projetos)`                                         |
-| `in_array()`                           | `!in_array($pagina, ['inicio', 'habilidades', 'projetos'])` para decidir 404                 |
-| `date()`                               | `date('2026')` no rodapé                                                                     |
+### (a) Por que `json_encode($perfil)` devolve `{}`?
 
----
+Porque **`json_encode` só vê propriedades públicas** de um objeto. Os atributos da classe `Perfil` foram declarados como `private` — o `json_encode` não tem acesso a eles a partir de fora da classe, então serializa o objeto como **um objeto vazio**: `{}`.
 
-## 5. Decisões e dificuldades
+É justamente por isso que existe o **`paraArray()`**: ele roda **dentro** da classe, onde os `private` são acessíveis, e devolve um array associativo com todos os dados. O `json_encode` então serializa o **array** (não o objeto). Ver seção 5.4.
 
-### Por que toda a lógica fica no topo do arquivo?
+### (b) Os objetos `$perfil` e `$projeto` continuam na memória do servidor depois que a página é enviada?
 
-Se qualquer coisa for impressa em HTML antes de `setcookie()` ou `header()`, o
-PHP emite o erro **"headers already sent"** e o cookie não é gravado, ou o
-`Content-Type` fica errado. Então a ordem é:
+**Não.** O ciclo de vida é:
 
-1. Dados em arrays;
-2. Tema (GET → cookie → padrão) + validação + `setcookie`;
-3. Rota JSON (`header()` + `json_encode` + `exit`);
-4. Rota da página (`$pagina`, bloco de 404);
-5. Só então o `<!DOCTYPE html>` e o HTML.
+1. O **servidor PHP embutido** recebe a requisição e chama o **`index.php`**.
+2. Tudo o que está no topo (`$perfil = new Perfil(...)`, `$perfil->adicionarProjeto(new Projeto(...))`) roda **do zero**.
+3. O HTML/JSON é enviado como resposta.
+4. Quando o `index.php` **termina** (ou o `exit` é atingido), **todas as variáveis locais e globais são destruídas** — inclusive `$perfil` e os `Projeto`s dentro dele.
+5. O próximo pedido ao servidor **reconstrói tudo** do começo.
 
-### Por que validar o tema?
+O PHP **não mantém** estado entre requisições (é *stateless* por padrão). O único jeito de "persistir" algo entre pedidos é gravando fora do processo — em **cookie**, **sessão** (`$_SESSION`, que usa arquivo no servidor), **banco de dados** ou **arquivo em disco**. É por isso que o **tema** usa `setcookie`: o objeto `$perfil` morre ao fim da requisição, mas o cookie **é devolvido pelo navegador** na próxima e o `index.php` lê de `$_COOKIE['tema']`.
 
-Se aceitássemos qualquer valor de `?tema=`, alguém poderia enviar `?tema=<script>`
-ou `?tema=../admin`. Ao forçar `$tema` a ser **apenas** `'claro'` ou `'escuro'`,
-garantimos que a classe no `<body>` nunca vire injeção de código nem aponte para
-caminhos inesperados. Testado com `?tema=<script>` — cai no tema claro e o HTML
-não executa nada.
+Um detalhe interessante: os objetos também não são serializados nem guardados em cache — recriar `$perfil` a cada requisição é rápido e barato, então **isso é intencional** no PHP (e em quase toda linguagem de aplicação web: cada requisição é uma execução nova do script).
 
-### Por que a URL tem prioridade sobre o cookie?
+### (c) Por que os atributos são `private` e não `public`?
 
-O `setcookie()` **grava** o cookie na resposta, mas **não o coloca** em `$_COOKIE`
-na mesma requisição. O navegador só devolve o cookie no **próximo** pedido. Por
-isso, ao trocar de tema via URL, o valor precisa vir de `$_GET['tema']`; da
-próxima vez em diante, o `$_COOKIE['tema']` assume o controle.
+**Três motivos:**
 
-### O que foi mais difícil
+1. **Encapsulamento / integridade**: com `public`, qualquer código de fora faria `$perfil->nome = '';` ou `$projeto->titulo = null;` **quebrando as regras** que a classe estabeleceu (título não vazio, mínimo de 5 habilidades, etc.). Com `private`, o **único jeito** de alterar um atributo é através dos métodos da classe — e esses métodos **aplicam as validações**.
 
-- Entender a ordem dos `if/elseif` no `<main>`: os casos de erro precisam vir
-  **antes** dos casos normais, senão a mensagem de "não encontrado" aparecia
-  junto com o conteúdo válido.
-- Lembrar que o `setcookie()` tem que vir **antes** do HTML — testar sem
-  `output_buffering=0` mascara o problema.
-- Fazer o `curl.exe` no Windows aceitar as aspas com `&` na URL (precisa
-  colocar toda a URL entre `"..."`).
+2. **Controle de leitura**: o resto do código só vê o que a classe **quer** expor, através de getters. Se um dia a forma de guardar a informação mudar (por exemplo, `$nomeCompleto` dividido em `$nome` + `$sobrenome`), **o HTML não precisa mudar** — os getters mantêm a mesma interface. Isso é o que a gente exercita neste projeto: os arrays da v1 viraram objetos na v2 **sem mudar o HTML exibido**.
+
+3. **O `json_encode` como "prova"**: se os atributos fossem `public`, `json_encode($perfil)` funcionaria — **mas com o nome "cru" das propriedades internas** (`nome`, `curso`, `apresentacao`, `projetos` como objetos, etc.). Aí a API ficaria **acoplada à estrutura interna** da classe. Com `private` + `paraArray()`, o formato do JSON é **uma decisão explícita da classe**, que ela pode mudar sem quebrar o resto.
+
+Resumindo: `private` + getters + `paraArray()` = **a classe controla o que entra, o que sai e como sai**.
 
 ---
 
-## 6. Como executar
+## 7. Como executar
 
-Dentro da pasta `projeto/v1`:
+Dentro da pasta `projeto/v2`:
 
 ```bash
 php -S localhost:8000 -d display_errors=1 -d output_buffering=0
@@ -261,11 +369,11 @@ Depois abrir `http://localhost:8000/` no navegador.
 
 ---
 
-## 7. Estrutura de arquivos da v1
+## 8. Estrutura de arquivos da v2
 
 ```
-projeto/v1/
-├── index.php       # toda a aplicação (rotas, dados, JSON)
+projeto/v2/
+├── index.php       # aplicação + classes Projeto e Perfil
 ├── estilo.css      # visual, com os dois temas
 ├── README.md       # este arquivo
 └── prints/
