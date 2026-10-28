@@ -10,7 +10,6 @@ class Projeto
 
     public function __construct(string $titulo, string $descricao, string $tecnologias)
     {
-        // R2: título vazio lança exceção ANTES do objeto existir
         if (trim($titulo) === '') {
             throw new Exception('O projeto precisa de um título');
         }
@@ -20,20 +19,9 @@ class Projeto
         $this->tecnologias = $tecnologias;
     }
 
-    public function getTitulo(): string
-    {
-        return $this->titulo;
-    }
-
-    public function getDescricao(): string
-    {
-        return $this->descricao;
-    }
-
-    public function getTecnologias(): string
-    {
-        return $this->tecnologias;
-    }
+    public function getTitulo(): string      { return $this->titulo; }
+    public function getDescricao(): string   { return $this->descricao; }
+    public function getTecnologias(): string { return $this->tecnologias; }
 
     public function paraArray(): array
     {
@@ -53,7 +41,7 @@ class Perfil
     private string $cidade;
     private string $apresentacao;
     private array  $habilidades;
-    private array  $projetos = []; // começa vazio; projetos vêm de adicionarProjeto()
+    private array  $projetos = [];
 
     public function __construct(
         string $nome,
@@ -63,7 +51,6 @@ class Perfil
         string $apresentacao,
         array $habilidades
     ) {
-        // R3: menos de 5 habilidades lança exceção ANTES do objeto existir
         if (count($habilidades) < 5) {
             throw new Exception('O perfil precisa de pelo menos 5 habilidades');
         }
@@ -76,15 +63,11 @@ class Perfil
         $this->habilidades  = $habilidades;
     }
 
-    // Adiciona um projeto no final, numerando a partir de 1.
-    // Aceita qualquer objeto que seja um Projeto (inclusive subclasses).
     public function adicionarProjeto(Projeto $projeto): void
     {
         $this->projetos[count($this->projetos) + 1] = $projeto;
     }
 
-    // Devolve o projeto com o $id informado; se não existir, lança exceção.
-    // Quem chama é obrigado a tratar (try/catch) — é o que o R5 pede.
     public function getProjeto(int $id): Projeto
     {
         if (!isset($this->projetos[$id])) {
@@ -94,7 +77,6 @@ class Perfil
         return $this->projetos[$id];
     }
 
-    // Getters — o HTML só acessa os dados por aqui (R6)
     public function getNome(): string         { return $this->nome; }
     public function getCurso(): string        { return $this->curso; }
     public function getCampus(): string       { return $this->campus; }
@@ -103,8 +85,6 @@ class Perfil
     public function getHabilidades(): array   { return $this->habilidades; }
     public function getProjetos(): array      { return $this->projetos; }
 
-    // Serializa o Perfil inteiro, convertendo cada projeto pelo seu próprio paraArray().
-    // Usado na rota JSON (R7).
     public function paraArray(): array
     {
         $projetosArray = [];
@@ -125,41 +105,21 @@ class Perfil
 }
 
 // ------------------------------------------------------------
-// 2. Arrays da v1 (ainda no lugar — saem no próximo commit)
+// 2. Os objetos (substituem os arrays da v1)
 // ------------------------------------------------------------
-$perfil = [
-    'nome'         => 'Breno França de Sousa',
-    'curso'        => 'Tecnologia em Análise e Desenvolvimento de Sistemas',
-    'campus'       => 'IFCE Campus Boa Viagem',
-    'cidade'       => 'Boa Viagem - CE',
-    'apresentacao' => 'Sou o Breno Natural de Boa Viagem e atualmente sou estudante do IFCE, '
-                    . 'escolhi este curso pois já estava na área antes mesmo de começar e resolvir ingressar em ADS.',
-    'habilidades'  => [
-        'HTML',
-        'CSS',
-        'PHP',
-        'Lógica de programação',
-        'Git e GitHub',
-    ],
-];
+$perfil = new Perfil(
+    'Breno França de Sousa',
+    'Tecnologia em Análise e Desenvolvimento de Sistemas',
+    'IFCE Campus Boa Viagem',
+    'Boa Viagem - CE',
+    'Sou o Breno Natural de Boa Viagem e atualmente sou estudante do IFCE, '
+        . 'escolhi este curso pois já estava na área antes mesmo de começar e resolvir ingressar em ADS.',
+    ['HTML', 'CSS', 'PHP', 'Lógica de programação', 'Git e GitHub']
+);
 
-$projetos = [
-    1 => [
-        'titulo'      => 'aguarde...',
-        'descricao'   => 'aguarde...',
-        'tecnologias' => 'PHP, HTML',
-    ],
-    2 => [
-        'titulo'      => 'aguarde...',
-        'descricao'   => 'aguarde...',
-        'tecnologias' => 'PHP, HTML, CSS',
-    ],
-    3 => [
-        'titulo'      => 'aguarde...',
-        'descricao'   => 'aguarde...',
-        'tecnologias' => 'HTML, CSS',
-    ],
-];
+$perfil->adicionarProjeto(new Projeto('aguarde...', 'aguarde...', 'PHP, HTML'));
+$perfil->adicionarProjeto(new Projeto('aguarde...', 'aguarde...', 'PHP, HTML, CSS'));
+$perfil->adicionarProjeto(new Projeto('aguarde...', 'aguarde...', 'HTML, CSS'));
 
 // ------------------------------------------------------------
 // 3. Tema claro ou escuro
@@ -175,23 +135,37 @@ if (isset($_GET['tema'])) {
 }
 
 // ------------------------------------------------------------
-// 4. Rota JSON (?formato=json) — ainda usa os arrays da v1
-// ------------------------------------------------------------
+// 4. Rota JSON (?formato=json)
 if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
     header('Content-Type: application/json; charset=utf-8');
 
+    $projetosArr = [];
+    foreach ($perfil->getProjetos() as $id => $projeto) {
+        $projetosArr[$id] = [
+            'titulo'      => $projeto->getTitulo(),
+            'descricao'   => $projeto->getDescricao(),
+            'tecnologias' => $projeto->getTecnologias(),
+        ];
+    }
+
     $dados = [
-        'perfil'   => $perfil,
-        'projetos' => $projetos,
+        'perfil' => [
+            'nome'         => $perfil->getNome(),
+            'curso'        => $perfil->getCurso(),
+            'campus'       => $perfil->getCampus(),
+            'cidade'       => $perfil->getCidade(),
+            'apresentacao' => $perfil->getApresentacao(),
+            'habilidades'  => $perfil->getHabilidades(),
+        ],
+        'projetos' => $projetosArr,
     ];
 
     echo json_encode($dados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// ------------------------------------------------------------
 // 5. Qual página mostrar
-// ------------------------------------------------------------
+
 $pagina = $_GET['pagina'] ?? 'inicio';
 
 $projetoAtual = null;
@@ -199,9 +173,10 @@ $erro         = null; // null | 'projeto' | 'pagina'
 
 if ($pagina == 'projeto') {
     $id = (int) ($_GET['id'] ?? 0);
+    $listaProjetos = $perfil->getProjetos();
 
-    if (isset($projetos[$id])) {
-        $projetoAtual = $projetos[$id];
+    if (isset($listaProjetos[$id])) {
+        $projetoAtual = $listaProjetos[$id];
     } else {
         http_response_code(404);
         $erro = 'projeto';
@@ -219,18 +194,18 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Estudante | <?= htmlspecialchars($perfil['nome']) ?></title>
+    <title>Perfil do Estudante | <?= htmlspecialchars($perfil->getNome()) ?></title>
 
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body class="tema-<?= htmlspecialchars($tema) ?>">
 
     <header>
-        <h1><?= htmlspecialchars($perfil['nome']) ?></h1>
+        <h1><?= htmlspecialchars($perfil->getNome()) ?></h1>
         <p>
-            <?= htmlspecialchars($perfil['curso']) ?>
+            <?= htmlspecialchars($perfil->getCurso()) ?>
             &mdash;
-            <?= htmlspecialchars($perfil['campus']) ?>
+            <?= htmlspecialchars($perfil->getCampus()) ?>
         </p>
 
         <nav>
@@ -260,43 +235,43 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
         <?php elseif ($pagina == 'inicio'): ?>
 
             <h2>Sobre mim</h2>
-            <p><?= htmlspecialchars($perfil['apresentacao']) ?></p>
+            <p><?= htmlspecialchars($perfil->getApresentacao()) ?></p>
 
             <h2>Dados</h2>
             <ul>
-                <li><strong>Curso:</strong>   <?= htmlspecialchars($perfil['curso']) ?></li>
-                <li><strong>Campus:</strong>  <?= htmlspecialchars($perfil['campus']) ?></li>
-                <li><strong>Cidade:</strong>  <?= htmlspecialchars($perfil['cidade']) ?></li>
+                <li><strong>Curso:</strong>   <?= htmlspecialchars($perfil->getCurso()) ?></li>
+                <li><strong>Campus:</strong>  <?= htmlspecialchars($perfil->getCampus()) ?></li>
+                <li><strong>Cidade:</strong>  <?= htmlspecialchars($perfil->getCidade()) ?></li>
             </ul>
 
         <?php elseif ($pagina == 'habilidades'): ?>
 
             <h2>Habilidades</h2>
-            <p><?= htmlspecialchars(implode(' , ', $perfil['habilidades'])) ?></p>
-            <p>Total de habilidades: <?= count($perfil['habilidades']) ?></p>
+            <p><?= htmlspecialchars(implode(' , ', $perfil->getHabilidades())) ?></p>
+            <p>Total de habilidades: <?= count($perfil->getHabilidades()) ?></p>
 
         <?php elseif ($pagina == 'projetos'): ?>
 
             <h2>Projetos</h2>
-            <p>Ao todo, <?= count($projetos) ?> projetos cadastrados.</p>
+            <p>Ao todo, <?= count($perfil->getProjetos()) ?> projetos cadastrados.</p>
 
             <ul>
-                <?php foreach ($projetos as $id => $projeto): ?>
+                <?php foreach ($perfil->getProjetos() as $id => $projeto): ?>
                     <li>
                         <a href="?pagina=projeto&amp;id=<?= (int) $id ?>">
-                            <?= htmlspecialchars($projeto['titulo']) ?>
+                            <?= htmlspecialchars($projeto->getTitulo()) ?>
                         </a>
                         &mdash;
-                        <?= htmlspecialchars($projeto['tecnologias']) ?>
+                        <?= htmlspecialchars($projeto->getTecnologias()) ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
 
         <?php elseif ($pagina == 'projeto' && $projetoAtual !== null): ?>
 
-            <h2><?= htmlspecialchars($projetoAtual['titulo']) ?></h2>
-            <p><?= htmlspecialchars($projetoAtual['descricao']) ?></p>
-            <p><strong>Tecnologias:</strong> <?= htmlspecialchars($projetoAtual['tecnologias']) ?></p>
+            <h2><?= htmlspecialchars($projetoAtual->getTitulo()) ?></h2>
+            <p><?= htmlspecialchars($projetoAtual->getDescricao()) ?></p>
+            <p><strong>Tecnologias:</strong> <?= htmlspecialchars($projetoAtual->getTecnologias()) ?></p>
             <p><a href="?pagina=projetos">&larr; Voltar para a lista de projetos</a></p>
 
         <?php endif; ?>
@@ -306,7 +281,7 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
     <footer>
         <p>Tema atual: <strong><?= htmlspecialchars($tema) ?></strong></p>
         <p><a href="?formato=json">Ver versão JSON</a></p>
-        <p>&copy; <?= date('2026') ?> <?= htmlspecialchars($perfil['nome']) ?></p>
+        <p>&copy; <?= date('2026') ?> <?= htmlspecialchars($perfil->getNome()) ?></p>
     </footer>
 
 </body>
