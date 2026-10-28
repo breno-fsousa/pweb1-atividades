@@ -1,5 +1,55 @@
 <?php
+// ------------------------------------------------------------
+// 1. Classes
+// ------------------------------------------------------------
+class Projeto
+{
+    private string $titulo;
+    private string $descricao;
+    private string $tecnologias;
 
+    public function __construct(string $titulo, string $descricao, string $tecnologias)
+    {
+        // R2: título vazio lança exceção ANTES do objeto existir
+        if (trim($titulo) === '') {
+            throw new Exception('O projeto precisa de um título');
+        }
+
+        $this->titulo      = $titulo;
+        $this->descricao   = $descricao;
+        $this->tecnologias = $tecnologias;
+    }
+
+    public function getTitulo(): string
+    {
+        return $this->titulo;
+    }
+
+    public function getDescricao(): string
+    {
+        return $this->descricao;
+    }
+
+    public function getTecnologias(): string
+    {
+        return $this->tecnologias;
+    }
+
+    // Será usado na rota JSON no commit "gera o JSON com paraArray()".
+    // json_encode($projeto) devolveria {} porque os atributos são private.
+    public function paraArray(): array
+    {
+        return [
+            'titulo'      => $this->titulo,
+            'descricao'   => $this->descricao,
+            'tecnologias' => $this->tecnologias,
+        ];
+    }
+}
+
+// ------------------------------------------------------------
+// 2. Arrays
+// ------------------------------------------------------------
 $perfil = [
     'nome'         => 'Breno França de Sousa',
     'curso'        => 'Tecnologia em Análise e Desenvolvimento de Sistemas',
@@ -34,20 +84,21 @@ $projetos = [
     ],
 ];
 
+// ------------------------------------------------------------
+// 3. Tema claro ou escuro (igual à v1)
+// ------------------------------------------------------------
 $tema = $_GET['tema'] ?? $_COOKIE['tema'] ?? 'claro';
 
-// Validação (R6): só pode ser 'claro' ou 'escuro'.
 if ($tema !== 'claro' && $tema !== 'escuro') {
     $tema = 'claro';
 }
 
-// setcookie só quando o tema vem pela URL (grava por 30 dias).
 if (isset($_GET['tema'])) {
     setcookie('tema', $tema, time() + (30 * 24 * 60 * 60), '/');
 }
 
 // ------------------------------------------------------------
-// Rota JSON (?formato=json)
+// 4. Rota JSON (?formato=json) — ainda usa os arrays da v1
 // ------------------------------------------------------------
 if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
     header('Content-Type: application/json; charset=utf-8');
@@ -62,13 +113,10 @@ if (isset($_GET['formato']) && $_GET['formato'] === 'json') {
 }
 
 // ------------------------------------------------------------
-// Qual página mostrar (lida da query string)
+// 5. Qual página mostrar
 // ------------------------------------------------------------
 $pagina = $_GET['pagina'] ?? 'inicio';
 
-// ------------------------------------------------------------
-// Detalhes de um projeto (?pagina=projeto&id=N)
-// ------------------------------------------------------------
 $projetoAtual = null;
 $erro         = null; // null | 'projeto' | 'pagina'
 
@@ -86,7 +134,6 @@ if ($pagina == 'projeto') {
     $erro = 'pagina';
 }
 
-// Texto e link do botão de troca de tema
 $temaOposto   = ($tema === 'claro') ? 'escuro' : 'claro';
 $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
 ?>
@@ -97,12 +144,10 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Estudante | <?= htmlspecialchars($perfil['nome']) ?></title>
 
-    <!-- CSS separado (R1) — o visual fica em estilo.css -->
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body class="tema-<?= htmlspecialchars($tema) ?>">
 
-    <!-- 5. Cabeçalho e menu (mesmo em todas as páginas) -->
     <header>
         <h1><?= htmlspecialchars($perfil['nome']) ?></h1>
         <p>
@@ -121,7 +166,6 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
         </nav>
     </header>
 
-    <!-- 6. Conteúdo da página escolhida -->
     <main>
 
         <?php if ($erro === 'projeto'): ?>
@@ -152,7 +196,6 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
 
             <h2>Habilidades</h2>
             <p><?= htmlspecialchars(implode(' , ', $perfil['habilidades'])) ?></p>
-
             <p>Total de habilidades: <?= count($perfil['habilidades']) ?></p>
 
         <?php elseif ($pagina == 'projetos'): ?>
@@ -183,7 +226,6 @@ $rotuloTrocar = ($tema === 'claro') ? '🌙 Tema escuro' : '☀️ Tema claro';
 
     </main>
 
-    <!-- 7. Rodapé -->
     <footer>
         <p>Tema atual: <strong><?= htmlspecialchars($tema) ?></strong></p>
         <p><a href="?formato=json">Ver versão JSON</a></p>
