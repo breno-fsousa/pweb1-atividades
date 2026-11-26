@@ -19,3 +19,43 @@ Route::get('/cartao', function () {
         </ul>
     ';
 });
+
+Route::get('/perfil-json', function () {
+    return [
+        'nome' => 'Breno França de Sousa',
+        'semestre' => 2,
+        'media' => 8.5,
+        'bolsista' => false,
+
+        'disciplinas' => [
+            'Programação Web',
+            'Banco de Dados',
+            'Ciência de Dados'
+        ],
+
+        'endereco' => [
+            'cidade' => 'Boa Viagem',
+            'uf' => 'CE'
+        ]
+    ];
+});
+
+Route::get('/perfil-criado', function () {
+    return response()->json([
+        'nome' => 'Breno França de Sousa',
+        'semestre' => 2,
+        'media' => 8.5,
+        'bolsista' => false,
+
+        'disciplinas' => [
+            'Programação Web',
+            'Banco de Dados',
+            'Ciência de Dados'
+        ],
+
+        'endereco' => [
+            'cidade' => 'Boa Viagem',
+            'uf' => 'CE'
+        ]
+    ], 201);
+});
