@@ -73,16 +73,49 @@ Nesse exercício, a resposta foi construída diretamente na rota, sem utilizar a
 ### Saídas
 <!-- curl.exe -i de /perfil-json e de /perfil-criado -->
 ```
-(cole aqui a saída do terminal)
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/perfil-json                   
+HTTP/1.1 200 OK
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Cache-Control: no-cache, private
+Date: Thu, 26 Nov 2026 02:55:55 GMT
+Content-Type: application/json
+Set-Cookie: XSRF-TOKEN=eyJpdiI6Ijg1OWo5c1VwOTkzZ2R2NHBQRmp5QkE9PSIsInZhbHVlIjoiY04yU0VYR3A3SWR0Vm9nSnNoUHBHd0lBTzRBaVZMT0xhUmY2WDA4RDFoVmdMV0xRUEtxdFZjQlFmMFRLcmlvVGM5WWdpNUk2b2R4TXZXSWU0VlZ1eWFVY0laaHlCdkhZaTd3QnQ4N1pxYm5hT3lTME9zNU5CVFNWZW8vMkdzc2EiLCJtYWMiOiIyODhkZDMwNmUwMWJkYWMxMWZjNzJiZDhkODcxNTg3YWY5NWI5NjA3Nzc4MWNkYmYxODRhOGEyZGNiOWUwNDkwIiwidGFnIjoiIn0%3D; expires=Thu, 26 Nov 2026 04:55:55 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6Ikdic05DUGpsbU4weFNneE9idnBiMWc9PSIsInZhbHVlIjoiRTlyNW9xZ2M5MnQ2VEVZVVpYK0EyT1UzRHB0N0lwamdVbzA4eVFUcUJ6cS9vMXNlMGRBUU5WTDl2RDJ2TUwwYUhnYW8relEraDhGZjQyNWVYN0FTNWY1bFZ5dmJVS1hvTFBQM203a3FvWjZmbFRrdVRNRTR6bjI5SXllOFRWMlYiLCJtYWMiOiJlMGFhMWZmNmE5MmRhNWZmNDRlZTc2YThjYTUyYjM0ODgwODJlY2JlM2NjYTJhZjU3ODVmNGIzN2UxN2FjYWZlIiwidGFnIjoiIn0%3D; expires=Thu, 26 Nov 2026 04:55:55 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+{"nome":"Breno Fran\u00e7a de Sousa","semestre":2,"media":8.5,"bolsista":false,"disciplinas":["Programa\u00e7\u00e3o Web","Banco de Dados","Ci\u00eancia de Dados"],"endereco":{"cidade":"Boa Viagem","uf":"CE"}}
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/perfil-criado
+HTTP/1.1 201 Created
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Cache-Control: no-cache, private
+Date: Thu, 26 Nov 2026 02:57:47 GMT
+Content-Type: application/json
+Set-Cookie: XSRF-TOKEN=eyJpdiI6InpnSTJlSmtSV1l0eVJocU8zaDdKTUE9PSIsInZhbHVlIjoialdkemJNV2JLTS9OZzZVOEc3SU9TS1JQVVZLcDFFOGNIWWpKeXdZdUd1NGFQbHpwUFBTNXNVUnpzdUozY3k4VzhhK21sNE5jdVBiWWNWZUEwSUZ1YUJrT3Y0ZmZtMG9DbFNtRzZtSDhUQ3h6YXNMRFF3MXhEUkg4VjUva1ZZMDAiLCJtYWMiOiJiNTY5MmU4MTAxNjUxZmQ0MzA2YmJlZTg1MDJlY2QyNjQ0NTIyNzY1NjhlY2ZjMWIwYmE5OThiYTA1YWQwNDZhIiwidGFnIjoiIn0%3D; expires=Thu, 26 Nov 2026 04:57:47 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6ImtpRkZFNFYxVVhSQ0FXMHRNaFNqT3c9PSIsInZhbHVlIjoiamlZYlVPWXVnaHFwdDRlaUhYWWR6ejZualdVcms3N21hdDRhaEttSXZMVVNWQm8vK250NFFpSW9Oc2Q0MGh6bzBZSGFGaWlibXllOFQ0Z2tMMXY1NEtqUDhZR1VGMU1xVzVpYWRPUm5NVEFqQm4xNGpmM2F4dGF1aThNcnAxZ2YiLCJtYWMiOiI2MzNjM2FjMzNmZTFiOTI4MjMyYjBlNjE0N2M3MGRjOGI3YWVmMDczN2MxZDdhNmQ2M2I5NDQ0ZDlhYmY2MmI1IiwidGFnIjoiIn0%3D; expires=Thu, 26 Nov 2026 04:57:47 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+{"nome":"Breno Fran\u00e7a de Sousa","semestre":2,"media":8.5,"bolsista":false,"disciplinas":["Programa\u00e7\u00e3o Web","Banco de Dados","Ci\u00eancia de Dados"],"endereco":{"cidade":"Boa Viagem","uf":"CE"}}
 ```
 
 ### Caminho da requisição
 _(ex.: GET /cardapio -> rota (web.php) -> CardapioController@index -> view cardapio -> HTML 200)_
 
 ### Respostas
-a) _(responda aqui)_
-b) _(responda aqui)_
-c) _(responda aqui)_
+a) Na primeira rota (/perfil-json), a primeira linha foi:
+HTTP/1.1 200 OK
+Na segunda rota (/perfil-criado), a primeira linha foi:
+HTTP/1.1 201 Created
+A diferença está no código de status HTTP. O código 200 OK indica que a requisição foi realizada com sucesso. Já o código 201 Created indica que um recurso foi criado com sucesso.
+As duas rotas retornaram os mesmos dados em formato JSON, mas utilizaram códigos de status diferentes.
+
+b) O valor booleano do PHP (false) apareceu no JSON como false, mantendo o mesmo tipo de dado.
+O array de disciplinas apareceu utilizando colchetes [], porque é um array numérico, ou seja, uma lista de valores.
+Já o endereço apareceu utilizando chaves {}, porque é um array associativo, que possui pares de chave e valor, como cidade e uf.
+
+c) Se a nota fosse 8.0, ela poderia aparecer no JSON como 8, dependendo de como o valor fosse representado pelo PHP.
+Isso acontece porque o JSON não diferencia números inteiros de números decimais de forma tão rígida quanto os tipos do PHP. Ambos são representados como números.
 
 
 ## A03: Tabuada e idade
