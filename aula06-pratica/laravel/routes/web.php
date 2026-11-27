@@ -110,3 +110,17 @@ Route::get('/produtos', function () {
     return 'Página de produtos!';
 });
 
+Route::get('/cardapio', function () {
+   $pratos = [
+    ['nome' => 'Baião de dois', 'preco' => 18.0],
+    ['nome' => 'Tapioca de queijo', 'preco' => 8.5],
+    ['nome' => 'Cuscuz com ovo', 'preco' => 7.0],
+    ['nome' => '<b>Panelada</b>', 'preco' => 25.0],
+];
+
+    return view('cardapio', [
+        'pratos' => $pratos
+    ]);
+})->name('cardapio');
+
+
