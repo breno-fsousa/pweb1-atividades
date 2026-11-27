@@ -86,3 +86,27 @@ Route::get('/boas-vindas/{turma?}', function ($turma = 'ADS') {
 
 });
 
+Route::get('/admin', function () {
+    return response('Área restrita', 403);
+});
+
+Route::get('/em-breve', function () {
+    return response('Página em construção', 503);
+});
+
+Route::get('/loja', function () {
+    return redirect('/feira', 302);
+});
+
+Route::get('/produtos-antigos', function () {
+    return redirect('/produtos', 301);
+});
+
+Route::get('/feira', function () {
+    return 'Bem-vindo à feira!';
+});
+
+Route::get('/produtos', function () {
+    return 'Página de produtos!';
+});
+
