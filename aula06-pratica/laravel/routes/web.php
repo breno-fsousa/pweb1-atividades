@@ -59,3 +59,30 @@ Route::get('/perfil-criado', function () {
         ]
     ], 201);
 });
+
+Route::get('/tabuada/{numero}', function ($numero) {
+
+    $resultado = '';
+
+    for ($i = 1; $i <= 10; $i++) {
+        $resultado .= "$numero x $i = " . ($numero * $i) . "<br>";
+    }
+
+    return $resultado;
+
+})->whereNumber('numero');
+
+Route::get('/idade/{ano}', function ($ano) {
+
+    $idade = date('Y') - $ano;
+
+    return "Quem nasceu em $ano tem ou vai fazer $idade anos em " . date('Y') . ".";
+
+})->whereNumber('ano');
+
+Route::get('/boas-vindas/{turma?}', function ($turma = 'ADS') {
+
+    return "Bem-vinda, turma de $turma!";
+
+});
+
