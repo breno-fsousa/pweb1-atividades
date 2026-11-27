@@ -341,16 +341,82 @@ O código 302 deve ser utilizado quando o redirecionamento é temporário. Por e
 ### Saídas
 <!-- curl.exe -i de /cardapio e a linha do Ctrl+U com a Panelada -->
 ```
-(cole aqui a saída do terminal)
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/cardapio                         
+HTTP/1.1 200 OK
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Content-Type: text/html; charset=utf-8
+Cache-Control: no-cache, private
+Date: Fri, 27 Nov 2026 02:07:48 GMT
+Set-Cookie: XSRF-TOKEN=eyJpdiI6IkVTeFYxa3c2Q2lSRTZvNkRNQUhDVWc9PSIsInZhbHVlIjoiT1ozdVUwYjIzTUo4QTBBY3A1QzJTcW9SWFA2TW1NQnVtYkhGNy8vMVR5akIrQUpSMHhad2xpUFpYUzJ5cWFWTy9kYVM2dFdtaFJBMXdWcGRJZTc1bUsycnp2TWoxcjJhVzh3d1NhOU42UVlCbWVkelVJWWZPNWcyL0EwNmpVSmUiLCJtYWMiOiI1ZWY4MDliMTFhNTY0MWQzNjYwMjBlNmFiYTQ4Yjc4Zjk1NTE3OGQ2MmVkYjE0NmRiMzlhZWM2YWVhMzZlZmY5IiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 04:07:48 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6IlN5bWFZK2JQZTJqaUFQeDhhd2k5RUE9PSIsInZhbHVlIjoiNURpZ2tUUDZPVDZFMVgxS2tHdWVJTE91UXl3cDZ2aWltV2dUbDhZYXU1aHM5eld2Z3BOM1FnNzYwZ3B3WEU5ZHJVU0c4R2R3a2tUbzBKQzNkZks2K3g4UjFOTktoN3hSTnVYTU8ybjM0ZE9XSGJqZkY1YzJWL0x0MysyYjd2eFQiLCJtYWMiOiIwZDIyYWI1OGY4NDQwNDFhMDc4MGE5MjY4M2QxMjk4ODhmZTE4YTc3YzE0MGY2NzVhMGM2M2UyYjI2YjUyMzMxIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 04:07:48 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio da Feira</title>
+</head>
+<body>
+
+    <header>
+        <h1>Feira Digital</h1>
+        <hr>
+    </header>
+
+    <main>
+            <h1>Cardápio da Feira</h1>
+
+    <p>Quantidade de pratos: 4</p>
+
+    <ul>
+                    <li>
+                Baião de dois -
+                R$ 18,00
+            </li>
+                    <li>
+                Tapioca de queijo -
+                R$ 8,50
+            </li>
+                    <li>
+                Cuscuz com ovo -
+                R$ 7,00
+            </li>
+                    <li>
+                &lt;b&gt;Panelada&lt;/b&gt; -
+                R$ 25,00
+            </li>
+            </ul>
+    </main>
+
+    <footer>
+        <hr>
+        <p>Projeto desenvolvido em Laravel - ADS</p>
+    </footer>
+
+</body>
+</html>
+
+Linha do Ctrl + U   &lt;b&gt;Panelada&lt;/b&gt; -
 ```
 
 ### Caminho da requisição
 _(ex.: GET /cardapio -> rota (web.php) -> CardapioController@index -> view cardapio -> HTML 200)_
 
 ### Respostas
-a) _(responda aqui)_
-b) _(responda aqui)_
-c) _(responda aqui)_
+a) O navegador faz uma requisição GET para /cardapio. O Laravel identifica a rota definida em routes/web.php, executa a closure, monta o array de pratos e envia os dados para a view cardapio.blade.php. A view utiliza o layout layouts/app.blade.php para montar o HTML final, que é enviado ao navegador.
+
+b) O nome apareceu na página como texto, mostrando as tags HTML em vez de deixar a palavra Panelada em negrito.
+Isso acontece porque o Blade utiliza {{ }} para escapar os caracteres especiais do HTML. Esse comportamento protege o site porque impede que códigos HTML ou JavaScript enviados como conteúdo sejam executados pelo navegador, ajudando a evitar ataques XSS.
+
+c) O Blade utilizou dois arquivos:
+
+resources/views/cardapio.blade.php: contém o conteúdo específico do cardápio, como título, quantidade de pratos e lista de preços.
+resources/views/layouts/app.blade.php: contém a estrutura principal da página, como HTML, cabeçalho, título do documento e área de conteúdo.
+
+A diretiva @extends('layouts.app') permite que a view do cardápio utilize o layout principal, enquanto @section e @yield definem onde o conteúdo será inserido.
 
 
 ## A06: Menu completo e rotas com nome
