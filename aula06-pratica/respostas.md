@@ -123,16 +123,97 @@ Isso acontece porque o JSON não diferencia números inteiros de números decima
 ### Saídas
 <!-- curl.exe -i de /tabuada/7, /tabuada/sete, /idade/2005 e /boas-vindas-turma -->
 ```
-(cole aqui a saída do terminal)
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/tabuada/7
+HTTP/1.1 200 OK
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Content-Type: text/html; charset=utf-8
+Cache-Control: no-cache, private
+Date: Fri, 27 Nov 2026 00:36:01 GMT
+Set-Cookie: XSRF-TOKEN=eyJpdiI6InhIRng0YjJqODdyOTdHL1pmQXNERHc9PSIsInZhbHVlIjoiVGZLNWYrVzJ0a1lZb3VZOXkyRk0rblhzenVKanRIQVlRa3lvbjU3RGRTZGpPVkJ3SDJwTlVacW5zQlN0aUJadkUrNUk3aDk0dkVQbmM0VGpqVFdreXMxcEVOT3Vyd3o1RllJdW1QWkhjTjcrdUFPditWYWo0LzZHOVVFZFBOWXMiLCJtYWMiOiI1YzY0OTU1NjYwODUxNDQzNmE5OTZiMzYwNTNmNDRlZjA0MGNjZGM3ODgwYTFhZDFhNmYyMjcxMWEzMjUzZjViIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 02:36:01 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6InB5RFpGMXZGYjc1aVdOL2F1TjJvcFE9PSIsInZhbHVlIjoibm9vQVUwTWZNcWV4ekFyZnJnM2lNTnU0NmllTmRxYWgyQWtuZDczYm0yZUg1S3l6d093dWhPU3N3Q01HMTNjRGwwRWhCczNvaCtLZXZEQ2N0aHdTRUhRdHBJK3ZReEQvR2l5NEZIYlozb01aWS83VnhydGhJODgyeGEvTzFwZUsiLCJtYWMiOiI2OTE4NWQ3YmQzZDE3OGM2MWY3OWJjZDdlODQxZGYyMWI2YjhmYWI0NmIyNGY1NmQxZDdjNzM5NzE4M2Y3ZWFiIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 02:36:01 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+7 x 1 = 7<br>7 x 2 = 14<br>7 x 3 = 21<br>7 x 4 = 28<br>7 x 5 = 35<br>7 x 6 = 42<br>7 x 7 = 49<br>7 x 8 = 56<br>7 x 9 = 63<br>7 x 10 = 70<br>
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/tabuada/sete
+HTTP/1.1 404 Not Found
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Cache-Control: no-cache, private
+date: Fri, 27 Nov 2026 00:36:25 GMT
+Content-Type: text/html; charset=utf-8
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Not Found</title>
+
+        <style>
+            /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}a{background-color:transparent}code{font-family:monospace,monospace;font-size:1em}[hidden]{display:none}html{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}a{color:inherit;text-decoration:inherit}code{font-family:Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}svg,video{display:block;vertical-align:middle}video{max-width:100%;height:auto}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.bg-gray-100{--bg-opacity:1;background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity))}.border-gray-200{--border-opacity:1;border-color:#edf2f7;border-color:rgba(237,242,247,var(--border-opacity))}.border-gray-400{--border-opacity:1;border-color:#cbd5e0;border-color:rgba(203,213,224,var(--border-opacity))}.border-t{border-top-width:1px}.border-r{border-right-width:1px}.flex{display:flex}.grid{display:grid}.hidden{display:none}.items-center{align-items:center}.justify-center{justify-content:center}.font-semibold{font-weight:600}.h-5{height:1.25rem}.h-8{height:2rem}.h-16{height:4rem}.text-sm{font-size:.875rem}.text-lg{font-size:1.125rem}.leading-7{line-height:1.75rem}.mx-auto{margin-left:auto;margin-right:auto}.ml-1{margin-left:.25rem}.mt-2{margin-top:.5rem}.mr-2{margin-right:.5rem}.ml-2{margin-left:.5rem}.mt-4{margin-top:1rem}.ml-4{margin-left:1rem}.mt-8{margin-top:2rem}.ml-12{margin-left:3rem}.-mt-px{margin-top:-1px}.max-w-xl{max-width:36rem}.max-w-6xl{max-width:72rem}.min-h-screen{min-height:100vh}.overflow-hidden{overflow:hidden}.p-6{padding:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pt-8{padding-top:2rem}.fixed{position:fixed}.relative{position:relative}.top-0{top:0}.right-0{right:0}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.text-center{text-align:center}.text-gray-200{--text-opacity:1;color:#edf2f7;color:rgba(237,242,247,var(--text-opacity))}.text-gray-300{--text-opacity:1;color:#e2e8f0;color:rgba(226,232,240,var(--text-opacity))}.text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-gray-700{--text-opacity:1;color:#4a5568;color:rgba(74,85,104,var(--text-opacity))}.text-gray-900{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity))}.uppercase{text-transform:uppercase}.underline{text-decoration:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.tracking-wider{letter-spacing:.05em}.w-5{width:1.25rem}.w-8{width:2rem}.w-auto{width:auto}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}@-webkit-keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@-webkit-keyframes ping{0%{transform:scale(1);opacity:1}75%,to{transform:scale(2);opacity:0}}@keyframes ping{0%{transform:scale(1);opacity:1}75%,to{transform:scale(2);opacity:0}}@-webkit-keyframes pulse{0%,to{opacity:1}50%{opacity:.5}}@keyframes pulse{0%,to{opacity:1}50%{opacity:.5}}@-webkit-keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:translateY(0);-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:translateY(0);-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@media (min-width:640px){.sm\:rounded-lg{border-radius:.5rem}.sm\:block{display:block}.sm\:items-center{align-items:center}.sm\:justify-start{justify-content:flex-start}.sm\:justify-between{justify-content:space-between}.sm\:h-20{height:5rem}.sm\:ml-0{margin-left:0}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pt-0{padding-top:0}.sm\:text-left{text-align:left}.sm\:text-right{text-align:right}}@media (min-width:768px){.md\:border-t-0{border-top-width:0}.md\:border-l{border-left-width:1px}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (prefers-color-scheme:dark){.dark\:bg-gray-800{--bg-opacity:1;background-color:#2d3748;background-color:rgba(45,55,72,var(--bg-opacity))}.dark\:bg-gray-900{--bg-opacity:1;background-color:#1a202c;background-color:rgba(26,32,44,var(--bg-opacity))}.dark\:border-gray-700{--border-opacity:1;border-color:#4a5568;border-color:rgba(74,85,104,var(--border-opacity))}.dark\:text-white{--text-opacity:1;color:#fff;color:rgba(255,255,255,var(--text-opacity))}.dark\:text-gray-300 { --text-opacity: 1; color: #e2e8f0; color: rgba(226,232,240,var(--text-opacity)) }}
+        </style>
+
+        <style>
+            body {
+                font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            }
+        </style>
+    </head>
+    <body class="antialiased bg-white text-black">
+        <div class="relative flex items-top justify-center min-h-screen bg-white text-black sm:items-center sm:pt-0" role="main">
+            <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
+                <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
+                    <h1 class="px-4 text-lg text-black border-r border-gray-400">
+                        404                    </h1>
+
+                    <div class="ml-4 text-lg text-black">
+                        Not Found                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/idade/2007
+HTTP/1.1 200 OK
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Content-Type: text/html; charset=utf-8
+Cache-Control: no-cache, private
+Date: Fri, 27 Nov 2026 00:37:48 GMT
+Set-Cookie: XSRF-TOKEN=eyJpdiI6IkJUZXUvcTlKcEUwSWtobGwzdHlBZkE9PSIsInZhbHVlIjoidFp5TEhSY2VoTEYwK3IrVmw1R0daalpTUjJBNFN1R0tqY3R3cldoZXl3QjIzdGhMMXRKNXlqRTB1UG84Y1dvUUhTdGl0N1QwVnY4SzVYV2NVUlppeG9ZRm9XdHNGSUFBb1pKMXBTa1FENUpkWW1DeTdGSk4wR3NkOUw3Z0FXUWoiLCJtYWMiOiI5YjYzZmU0MWM2N2U2YzBkM2RjMDk0YWM0NmYzYzNhODUwYTAzYTY3MDZmMzJiMGJlZDdmMTU3MzYzNzk0NTYzIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 02:37:48 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6IjhnMzhjSVdjemlyQjJtS0lBOTZnNVE9PSIsInZhbHVlIjoiaWxYMmhYSVlHbHFNcklabklGbXFqTFJjZWhRSms2dlhqMmE1R2hXeWNubDcwRGE2SVhhamZRa3FxVHQ0anM0Y2tVYkZjcWxBbVRwNU5JK2cycWZoUlpwOTNGOVEwd1R4SzIyMXY3b0d1WXhXb3lTNjZQRzdmSmtqTjkwMS9na0EiLCJtYWMiOiIxODJkYmI0YzEyZTMwMDU0OTNmYWNlYjJkMjAyOGEwOTEyOTBiNTRiOGFiNThjMmEzZmVkYjBlZGYxOTI2MTZjIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 02:37:48 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+Quem nasceu em 2007 tem ou vai fazer 19 anos em 2026.
+
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/boas-vindas      
+HTTP/1.1 200 OK
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Content-Type: text/html; charset=utf-8
+Cache-Control: no-cache, private
+Date: Fri, 27 Nov 2026 00:38:46 GMT
+Set-Cookie: XSRF-TOKEN=eyJpdiI6IjlDTUVUOVh4dFphK0F3bTY0aUFNWnc9PSIsInZhbHVlIjoibmR6QW5nMU1tbFl5MUMyclFlazV2QktPR3I5OThNYkVKYVFtOGpHdVhrbXZQVTFTRlB5UnFsZ1FIS0JhQ3czM1pPRUVVN0U5QnFEUVNTc2cvVm0zTG45R1Z0VW5hYzlNeGtlMDVGVzBEMnlPTEFCUTdmdzU1WHlMK0x6Y0l4dk4iLCJtYWMiOiJlYTYyODAyOWJhYjFlNjEyNTFjNWM0YzNjMWViYzBkZmJjYjc4YmYxMjVjMzkxOTYyMDgyNzgyOThjMGRkNjhkIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 02:38:46 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6Ik1WR2tjRCs1Qm5VVXczQjh1amNCMFE9PSIsInZhbHVlIjoiZkptTjlMVUJlWE1seFZyRDBOSUd5V2VnZkt3YU5QNW9yK2xNWW1heGpzVmZVUFhXSU1mSHN4R1JsV1FhdGlDUHJUM2JKcUMxaStHMi9hdzhTTHpyelY1OUJLcnJseHE5a0xSSXlwOElSQURrWHJNMTNvd2VNUEk4dkZmTGlrUkIiLCJtYWMiOiI4MzZjYmRhZDZkNzBhNDlmMmQ1YjllZWZhNDExODhjMTA3ZmI3MWMzYjVmYTM1YmJhYzc3YzViMDBlMDc1NTA3IiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 02:38:46 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+Bem-vinda, turma de ADS!
 ```
 
 ### Caminho da requisição
 _(ex.: GET /cardapio -> rota (web.php) -> CardapioController@index -> view cardapio -> HTML 200)_
 
 ### Respostas
-a) _(responda aqui)_
-b) _(responda aqui)_
-c) _(responda aqui)_
+a) Ao acessar /tabuada/sete, o Laravel retornou uma página de erro 404 (Not Found).
+Isso aconteceu porque a rota /tabuada/{numero} possui a restrição whereNumber('numero'), que permite receber somente valores numéricos.
+Quem respondeu foi o próprio Laravel, informando que nenhuma rota correspondente foi encontrada. A rota da tabuada não foi executada.
+b) Ao retirar o whereNumber('numero'), a rota passa a aceitar qualquer valor no parâmetro, inclusive textos.
+Ao acessar /tabuada/sete, a rota é executada, mas como o valor recebido é um texto, o cálculo da tabuada não funciona corretamente, podendo apresentar erro ou resultados inválidos.
+A restrição whereNumber é melhor porque impede que valores inválidos sejam recebidos, evitando erros no processamento e garantindo que a rota receba somente números.
+c) O ponto de interrogação (?) indica que o parâmetro da rota é opcional, ou seja, o usuário pode acessar o endereço sem informar uma turma.
 
 
 ## A04: Status e redirecionamentos
