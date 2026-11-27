@@ -221,17 +221,119 @@ c) O ponto de interrogação (?) indica que o parâmetro da rota é opcional, ou
 ### Saídas
 <!-- curl.exe -i de /admin, /em-breve, /loja e /produtos-antigos -->
 ```
-(cole aqui a saída do terminal)
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/admin
+HTTP/1.1 403 Forbidden
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Cache-Control: no-cache, private
+Date: Fri, 27 Nov 2026 01:11:52 GMT
+Content-Type: text/html; charset=utf-8
+Set-Cookie: XSRF-TOKEN=eyJpdiI6InhYUWxNZENYMVVOSjcraUVtUE5acEE9PSIsInZhbHVlIjoiajN3VWJjUWdRcXZXTi9Jb05kbTlSTkZmSEFYVlVOK3ZtdkdjV0NLd05acHBzdWR0TVhNcFNLaDRCWFA0eC94SnBYWWV6dnk4RldUQmRQOFhON1oyTURxV2o1VXh3d0RqdVpvT2V3V09IWW9UMDJTdWtvMm5sMC9nVTY5U0NDVTMiLCJtYWMiOiJkYjg0ZTdlMWM0ZmM5OGE3NzcxZWFmZDUzNmVkNDE3NzFhNDkxMWJhY2I3ZmU1ZTcyNWEwNmViMGZhMTVhMWMyIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:11:52 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6ImtlcmZJVUJpd2I1NjNPWEhQVnYrSVE9PSIsInZhbHVlIjoidzIwbzB4bFFrZnB3djNOanYyVHlLZGlLQmx6cmtsMDg4QTl0SWFIUHNpVGtCaWlzSlViTCtzUjh6RjBOREowd1UwdUptWm0vOTRVV2xnWElkWGtGemdBWmZ5bkZQMldpb3U4a2lpVTgzM09aOXdZUTM1YnV0YUhGd1VsdkN5MzMiLCJtYWMiOiI4NzBkMTNkODg2YTFlNzg4ZjZhNmY1ZjBmZjFjNTcwYTdiYTMxMjU1N2QwOTI5YjU0MjlmZjNlMDE1NzhkZGVhIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:11:52 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+Área restrita
+
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/em-breve
+HTTP/1.1 503 Service Unavailable
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Cache-Control: no-cache, private
+Date: Fri, 27 Nov 2026 01:13:11 GMT
+Content-Type: text/html; charset=utf-8
+Set-Cookie: XSRF-TOKEN=eyJpdiI6ImRFeTZ4YUtWeVdWdlZjWVBYdU1LNEE9PSIsInZhbHVlIjoiNXVEVzFlTVo0RjJ2U29wSld6SSt3dDdndmM2REJCTXcyWEpLZ1RZZkJnWGw5YjZBd1FjWER6TEgzcEhEcFlINitqNTJGQm1RM3A1czgzMWR2V09CSmZrRWlhRUd6SjE3cEtsbnJjTmF4MnZNaHdqU1N0V3FaZHVxbWlEZFU4aGgiLCJtYWMiOiI4MTgyM2UxOGQwZjY0NzY0NjYzMjhlY2EwOWEwM2IzZTA1NjRiZTQxZWMxYmY5NGYwMzI3N2VjN2Y5NTg4OGE5IiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:13:11 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6Ik4wbEh0eUt3aUF3ZEt1TkFuSnNTY3c9PSIsInZhbHVlIjoiVm5VYkdqQnhBVHJmaHd1ckM5UVp3Y21uSm5kenUyVXhBSG5ZYm9TeVlhMzRpbmVVZnBkaW5Bem5hRUtqUU5WQXNDQkZGU1hkWWRpbDczNHNrKzJWTnNDT0creWdVek9vc1JMYjFveVJORDNuNlhRNVVoVlVhdmFDc0RjOW9PS2EiLCJtYWMiOiJlODU2MjkzNWZkMTMyMzI1NGU5MDk2MWE5NGM4ODVhOGQyYjc5YTAwNWNlNTcxNjc4MzI1MGJjODdhYjkwYTYyIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:13:11 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+Página em construção
+
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/loja
+HTTP/1.1 302 Found
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Cache-Control: no-cache, private
+Date: Fri, 27 Nov 2026 01:13:20 GMT
+Location: http://127.0.0.1:8000/feira
+Content-Type: text/html; charset=utf-8
+Set-Cookie: XSRF-TOKEN=eyJpdiI6Ik1qcHB0OUxsQTZMcHAxb2pxbGhud0E9PSIsInZhbHVlIjoiNnJCVUV6dlA3TjVoN2NnbmpOdDQvRU1BTGl2Q251RlZpblI5eXgxVTZVcG1JY0lRRzUwV01zZUNGNGZ0Wi9WMlpjaWprSHdtUnR1bWp6MzJ6ZEUxS1BZSTVpeG5qWk9LUlJBMmdWRFE1UzZIMjBrdDRkdFA5UFhwcFFZYVdzdFciLCJtYWMiOiI2YWRlYjZjYzg1ZTdlNzQyMWNmYzE1NTMyOWMwNTM0OThhZDg1MWIzM2U4ZTNkNzNhMjZkZDE2OTU2MTcwOTM2IiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:13:20 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6IkJWQ0lVaUFIMkNHa1ZHRkdUeFFlSlE9PSIsInZhbHVlIjoiM3h6Tk5mdXdwVlpjR1VCanp1U3NlVC8zZHV1eGk0c01HRGxJcCtQWEJBVENKOTRUcDRibUt0bnFQbHdFd0ZnZnZvbzZYRVFSazBIUy9aWjdSVVREbWpmVVlEMnlISG41R1VaT21VVW00cC9rVWxBckhMU2kxRnN1a0dQcmEvdzEiLCJtYWMiOiJjYjU3NDNjZDRiMjUwZWYyMWMyZDBjNTkzNWE5ODk1Mjk0YTMxNmUwMDNjODhjNjc4NDBhZmNjMzA2NDE5NTg2IiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:13:20 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='http://127.0.0.1:8000/feira'" />
+
+        <title>Redirecting to http://127.0.0.1:8000/feira</title>
+    </head>
+    <body>
+        Redirecting to <a href="http://127.0.0.1:8000/feira">http://127.0.0.1:8000/feira</a>.
+    </body>
+</html>
+
+PS C:\Users\breno\Documents\pweb1-atividades\aula06-pratica\laravel> curl.exe -i http://127.0.0.1:8000/produtos-antigos
+HTTP/1.1 301 Moved Permanently
+Host: 127.0.0.1:8000
+Connection: close
+X-Powered-By: PHP/8.4.25
+Date: Fri, 27 Nov 2026 01:13:36 GMT
+Location: http://127.0.0.1:8000/produtos
+Content-Type: text/html; charset=utf-8
+Set-Cookie: XSRF-TOKEN=eyJpdiI6ImhMMDlvZ0VuZkNnbGY2SENOdXFoRWc9PSIsInZhbHVlIjoiSUM1ajZrWmUvblRaVDByMDA4cW5ublBiRWlEaTZLcW5wK0xtMCtOQWllRkdkNk9oWHd5ei9JbURBQmZrWVNwQUZCSmdmMVp1Zjd6N1NvT2pGYzV4UWxnQ0ZBTVlQRVVJOVhFWUV5NkR3VlVqTDJkMlo1UjNIVVdtRG9NMEM4RDAiLCJtYWMiOiI0MWFjMTY2Y2U5YWEyZDA0MjI4YmFkNmJlYzNiZDliNWMyOGNiMjIyNjlhMGE2MzFiOTk3NWNhMzE3ZTkyMmExIiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:13:36 GMT; Max-Age=7200; path=/; samesite=lax
+Set-Cookie: laravel-session=eyJpdiI6InRZS3ZjaVl0VW1YUnhjWnJMZHdVVXc9PSIsInZhbHVlIjoiaDA0TE9WQTd1VEh1eklBYVBmLzY4Y0V1ZVVIUFNwZEVQQlhaUkVSS0lsZExwNG1YUHBickFBMzJWYkJqa3R6YUZuNGFVbEtEVmNhdi90SlRrVTZPME1GNlBFYkNYOFBDRFlNY05PZXF5MTFjUk5abC9MWVNpRVQ1b2JVaVZOM3UiLCJtYWMiOiI2MDIxYTJiYzk1MjVhZGVkYjM4NDQ0YjI2NDRhN2UxZjg1YTBhMjRmNjc3ZGM2ZTFlOGYxYmM2NTE3OGIyMWQ0IiwidGFnIjoiIn0%3D; expires=Fri, 27 Nov 2026 03:13:36 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='http://127.0.0.1:8000/produtos'" />
+
+        <title>Redirecting to http://127.0.0.1:8000/produtos</title>
+    </head>
+    <body>
+        Redirecting to <a href="http://127.0.0.1:8000/produtos">http://127.0.0.1:8000/produtos</a>.
+    </body>
+</html>
 ```
 
 ### Caminho da requisição
 _(ex.: GET /cardapio -> rota (web.php) -> CardapioController@index -> view cardapio -> HTML 200)_
 
 ### Respostas
-a) _(responda aqui)_
-b) _(responda aqui)_
-c) _(responda aqui)_
-d) _(responda aqui)_
+a) 1. Rota /admin:
+HTTP/1.1 403 Forbidden
+Content-Type: text/html; charset=utf-8
+
+Conteúdo retornado: Área restrita.
+
+2. Rota /em-breve:
+HTTP/1.1 503 Service Unavailable
+Content-Type: text/html; charset=utf-8
+
+Conteúdo retornado: Página em construção.
+
+3. Rota /loja:
+HTTP/1.1 302 Found
+Location: http://127.0.0.1:8000/feira
+
+4. Rota /produtos-antigos:
+HTTP/1.1 301 Moved Permanently
+Location: http://127.0.0.1:8000/produtos
+
+As duas primeiras rotas retornaram códigos de erro HTTP. As duas últimas retornaram redirecionamentos, indicando o novo endereço no cabeçalho Location.
+
+b) Eu provaria utilizando o comando curl.exe -i http://127.0.0.1:8000/admin no terminal.
+O resultado mostra o código HTTP/1.1 403 Forbidden, comprovando que o servidor retornou uma resposta de acesso proibido, mesmo que o navegador apresente a mensagem como uma página normal.
+Isso acontece porque o navegador consegue exibir o conteúdo da resposta independentemente de ela ter sido bem-sucedida ou apresentar um erro HTTP.
+
+c) O navegador fez duas requisições:
+1. Uma requisição para /loja, que recebeu o status 302 Found.
+2. Outra requisição para /feira, que recebeu o conteúdo da página de destino.
+O curl.exe -i mostrou somente uma resposta porque, por padrão, ele não segue automaticamente os redirecionamentos. Ele apenas mostra a primeira resposta e o cabeçalho Location, que informa o endereço de destino.
+
+d) O código 301 deve ser utilizado quando um endereço foi alterado permanentemente. Por exemplo, se a Feira Digital mudar definitivamente o endereço /produtos-antigos para /produtos, deve utilizar o redirecionamento 301.
+O código 302 deve ser utilizado quando o redirecionamento é temporário. Por exemplo, se a Feira Digital direcionar temporariamente os visitantes da rota /loja para /feira durante uma manutenção ou promoção, deve utilizar o redirecionamento 302.
 
 
 ## A05: O cardápio da feira
